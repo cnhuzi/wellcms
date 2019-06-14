@@ -1,0 +1,38 @@
+<!--
+属性列表形式
+-->
+<div class="card card-threadlist">
+    <div class="card-body">
+        <table class="table table-bordered text-center">
+            <tbody>
+            <tr>
+                <td><?php echo lang('well_flag');?></td>
+                <td><?php echo lang('well_column');?></td>
+                <td class="hidden-sm hidden-md"><?php echo lang('well_thread_count');?></td>
+                <td class="hidden-sm hidden-md"><?php echo lang('well_create_date');?></td>
+            </tr>
+            <!-- 循环输出 设置为显示的属性 -->
+            <?php if(!empty($arrlist)){ foreach($arrlist as $k => &$v) {?>
+            <tr class="tap" data-href="<?php echo $v['url']; ?>">
+                <td class="break-all">
+                    <a href="<?php echo $v['url']; ?>"><?php echo $v['name'];?></a>
+                </td>
+                <td>
+                    <a href="<?php echo $v['forum_url']; ?>"><?php echo $v['column_name'];?></a>
+                </td>
+                <td class="hidden-sm hidden-md">
+                    <?php echo $v['count'];?>
+                </td>
+                <td class="hidden-sm hidden-md">
+                    <?php echo $v['create_date_text'];?>
+                </td>
+            </tr>
+            <?php }} ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php if ($pagination) { ?>
+<nav class="my-3"><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+<?php } ?>

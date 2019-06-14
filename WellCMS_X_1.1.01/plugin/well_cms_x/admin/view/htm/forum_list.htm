@@ -1,0 +1,256 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+<!--{hook admin_forum_list_start.htm}-->
+
+<div class="row">
+    <div class="col-12">
+        <div class="btn-group mb-3" role="group">
+            <?php echo admin_tab_active($menu['forum']['tab'], 'list');?>
+        </div>
+    </div>
+</div>
+
+<!--{hook admin_forum_list_before.htm}-->
+
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<form action="<?php echo url('forum-list');?>" method="post" id="form">
+                    <div class="table-responsive arrlist">
+                        <table class="table table-bordered table-hover text-center bg-white">
+                            <thead>
+                            <tr>
+                                <td>
+                                    <?php echo lang('forum_rank');?>
+                                </td>
+                                <td colspan="2">
+                                    <?php echo lang('forum_name');?>
+                                </td>
+                                <td colspan="2">
+                                    <?php echo lang('forum_icon');?>
+                                </td>
+                                <td class="hidden-sm">
+                                    <?php echo lang('well_nav');?>
+                                </td>
+                                <td class="hidden-sm">
+                                    <?php echo lang('well_comment');?>
+                                </td>
+                                <td>
+                                    <?php echo lang('forum_edit');?>
+                                </td>
+                                <td>
+                                    <?php echo lang('forum_delete');?>
+                                </td>
+                            </tr>
+                            <thead>
+                            <tbody>
+                            <?php if ($forumarr) { foreach($forumarr as $_fid=>$_forum) { ?>
+                            <!--频道-->
+                            <?php if ($_forum['well_forum_type'] == 1) { ?>
+
+                            <tr align="center" rowid="<?php echo $_fid; ?>">
+                                <input type="hidden" class="form-control" name="fid[<?php echo $_fid;?>]" value="<?php echo $_forum['fid']; ?>" placeholder="<?php echo lang('forum_id');?>" />
+                                <td width="80">
+                                    <input type="text" class="form-control" name="rank[<?php echo $_fid;?>]" value="<?php echo $_forum['rank']; ?>" placeholder="<?php echo lang('forum_rank');?>" />
+                                </td>
+                                <td width="100">
+                                    <input type="text" class="form-control" name="name[<?php echo $_fid;?>]" value="<?php echo $_forum['name']; ?>" placeholder="<?php echo lang('forum_name');?>" />
+                                </td>
+                                <td class="font-weight-bold text-danger small hidden-sm">
+                                    <?php echo lang('well_channel'); ?>
+                                </td>
+                                <td width="50" align="left">
+                                    <img src="../<?php echo $_forum['icon_url']; ?>" class="forum" width="30" id="img_<?php echo $_fid;?>" />
+                                </td>
+                                <td width="95" align="left">
+                                    <input type="file" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,.bmp" class="w-100" name="icon[<?php echo $_fid;?>]" value="" data-assoc="img_<?php echo $_fid;?>" placeholder="<?php echo lang('forum_icon');?>" />
+                                </td>
+                                <td class="hidden-sm">
+                                    <?php if ($_forum['well_nav_display']) {echo lang('well_display_yes');} else {echo lang('well_display_no');} ?>
+                                </td>
+                                <td class="hidden-sm">
+                                    <?php if ($_forum['well_comment']) {echo lang('well_comment_yes');} else {echo lang('well_comment_no');} ?>
+                                </td>
+                                <td>
+                                    <a class="btn row_edit" role="button" tabindex="0"><?php echo lang('forum_edit');?></a>
+                                </td>
+                                <td>
+                                    <a class="btn row_delete" role="button" tabindex="0"><?php echo lang('forum_delete');?></a>
+                                </td>
+                            </tr>
+                            <!--子栏目-->
+                            <?php if (isset($_forum['son'])) { foreach($_forum['son'] as $son_fid=>$_son) { ?>
+
+                            <tr align="center" rowid="<?php echo $_son['fid']; ?>">
+                                <input type="hidden" class="form-control" name="fid[<?php echo $_son['fid'];?>]" value="<?php echo $_son['fid']; ?>" placeholder="<?php echo lang('forum_id');?>" />
+                                <td width="80">
+                                    <input type="text" class="form-control" name="rank[<?php echo $_son['fid'];?>]" value="<?php echo $_son['rank']; ?>" placeholder="<?php echo lang('forum_rank');?>" />
+                                </td>
+                                <td width="100">
+                                    <input type="text" class="form-control" name="name[<?php echo $_son['fid'];?>]" value="<?php echo $_son['name']; ?>" placeholder="<?php echo lang('forum_name');?>" />
+                                </td>
+                                <td class="font-weight-bold text-danger small hidden-sm">
+                                    <?php echo lang('well_son_column'); ?>
+                                </td>
+                                <td width="50" align="left">
+                                    <img src="../<?php echo $_son['icon_url']; ?>" class="forum" width="30" id="img_<?php echo $_son['fid'];?>" />
+                                </td>
+                                <td width="95" align="left">
+                                    <input type="file" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,.bmp" class="w-100" name="icon[<?php echo $_son['fid'];?>]" value="" data-assoc="img_<?php echo $_son['fid'];?>" placeholder="<?php echo lang('forum_icon');?>" />
+                                </td>
+                                <td class="hidden-sm">
+                                    <?php if ($_son['well_nav_display']) {echo lang('well_display_yes');} else {echo lang('well_display_no');} ?>
+                                </td>
+                                <td class="hidden-sm">
+                                    <?php if ($_son['well_comment']) {echo lang('well_comment_yes');} else {echo lang('well_comment_no');} ?>
+                                </td>
+                                <td>
+                                    <a class="btn row_edit" role="button" tabindex="0"><?php echo lang('forum_edit');?></a>
+                                </td>
+                                <td>
+                                    <a class="btn row_delete" role="button" tabindex="0"><?php echo lang('forum_delete');?></a>
+                                </td>
+                            </tr>
+
+                            <?php }} ?>
+                            <?php } else { ?>
+
+                            <!--顶级栏目-->
+                            <tr align="center" rowid="<?php echo $_forum['fid']; ?>">
+                                <input type="hidden" class="form-control" name="fid[<?php echo $_fid;?>]" value="<?php echo $_forum['fid']; ?>" placeholder="<?php echo lang('forum_id');?>" />
+                                <td width="80">
+                                    <input type="text" class="form-control" name="rank[<?php echo $_forum['fid'];?>]" value="<?php echo $_forum['rank']; ?>" placeholder="<?php echo lang('forum_rank');?>" />
+                                </td>
+                                <td width="100">
+                                    <input type="text" class="form-control" name="name[<?php echo $_fid;?>]" value="<?php echo $_forum['name']; ?>" placeholder="<?php echo lang('forum_name');?>" />
+                                </td>
+                                <td class="font-weight-bold small hidden-sm forum-type">
+                                    <?php echo lang('well_column'); ?>
+                                </td>
+                                <td width="50" align="left">
+                                    <img src="../<?php echo $_forum['icon_url']; ?>" class="forum" width="30" id="img_<?php echo $_forum['fid'];?>" />
+                                </td>
+                                <td width="95" align="left">
+                                    <input type="file" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,.bmp" class="w-100" name="icon[<?php echo $_forum['fid'];?>]" value="" data-assoc="img_<?php echo $_forum['fid'];?>" placeholder="<?php echo lang('forum_icon');?>" />
+                                </td>
+                                <td class="hidden-sm forum-display">
+                                    <?php if ($_forum['well_nav_display']) {echo lang('well_display_yes');} else {echo lang('well_display_no');} ?>
+                                </td>
+                                <td class="hidden-sm forum-comment">
+                                    <?php if ($_forum['well_comment']) {echo lang('well_comment_yes');} else {echo lang('well_comment_no');} ?>
+                                </td>
+                                <td>
+                                    <a class="btn row_edit" role="button" tabindex="0"><?php echo lang('forum_edit');?></a>
+                                </td>
+                                <td>
+                                    <a class="btn row_delete" role="button" tabindex="0"><?php echo lang('forum_delete');?></a>
+                                </td>
+                            </tr>
+
+                            <?php } ?>
+                            <?php }} else { ?>
+
+                            <tr>
+                                <td colspan="9"><?php echo lang('none');?></td>
+                            </tr>
+
+                            <?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+					<p><a role="button" class="btn row_add">[+]<?php echo lang('add_new_line');?></a></p>
+					<p class="text-center">
+						<button type="submit" class="btn btn-primary" id="submit" data-loading-text="<?php echo lang('submiting');?>..." style="width: 10rem;"><?php echo lang('confirm');?></button>
+					</p>
+				</form>
+				<p class="small text-grey"><?php echo lang('tips');?>：<?php echo lang('forum_edit_tip');?></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--{hook admin_forum_list_end.htm}-->
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+
+var maxfid = <?php echo $maxfid;?>;
+
+var jform = $("#form");
+var jsubmit = $("#submit");
+
+jform.base64_encode_file(); /*对文件进行 base64 编码，处理文件上传，很方便*/
+
+jform.on('submit', function(){
+	jform.reset();
+	var postdata = jform.serialize();
+	jsubmit.button('loading');
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			$.alert(message);
+			jsubmit.text(message).delay(1000).location();
+            return false;
+		} else {
+			alert(message);
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+/*编辑*/
+var jarrlist = $('.arrlist');
+var jedit = $('a.row_edit');
+jarrlist.on('click', 'a.row_edit', function() {
+	var jthis = $(this);
+	var jtr = jthis.parents('tr');
+	var rowid = jtr.attr('rowid');
+	window.location = xn.url('forum-update-'+rowid);
+});
+
+/*删除*/
+var jdelete = $('a.row_delete');
+jarrlist.on('click', 'a.row_delete', function() {
+	var jthis = $(this);
+	var jtr = jthis.parents('tr');
+	var rowid = jtr.attr('rowid');
+	if(rowid == 1) {
+		$.alert('<?php echo lang('forum_cant_delete_system_reserved');?>');
+		return;
+	}
+	jtr.remove();
+	return false;
+});
+/*增加*/
+var jadd = $('a.row_add');
+jadd.on('click', function() {
+	var jclone = jarrlist.find('tr').last().clone();
+	jclone.insertAfter(jarrlist.find('tr').last());
+	var jfid = jclone.find('input[name^="fid"]');
+	var rowid = ++maxfid;
+	jfid.val(rowid);
+	jclone.attr('rowid', rowid);
+
+	/*清空值*/
+	jclone.find('input').not('[name^="fid"]').val('');
+	jclone.find('.forum-type').text('');
+	jclone.find('.forum-display').text('');
+	jclone.find('.forum-comment').text('');
+
+	/*修改 [] 中的值为 rowid*/
+	jclone.find('input').attr_name_index(rowid);
+	
+	/*图片缩略*/
+	jclone.find('img.forum').attr('id', 'img_'+rowid).attr('src', '../view/img/forum.png');
+	jclone.find('input[type="file"]').attr('data-assoc', 'img_'+rowid);
+
+	return false;
+});
+
+$('#nav li.nav-item-forum').addClass('active');
+</script>
+
+<!--{hook admin_forum_list_js.htm}-->

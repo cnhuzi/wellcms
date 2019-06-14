@@ -1,0 +1,264 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+<!--{hook website_admin_template_main_start.htm}-->
+
+<div class="row">
+    <div class="col-12">
+        <div class="btn-group mb-3" role="group">
+            <?php echo admin_tab_active($menu['template']['tab'], 'diy');?>
+        </div>
+    </div>
+</div>
+<!--{hook website_admin_template_main_after.htm}-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-threadlist">
+            <?php include _include(APP_PATH.'plugin/well_cms_x/admin/view/htm/template_header.inc.htm');?>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row d-flex justify-content-between mx-0 mb-3">
+                            <div>
+                                <select class="custom-select mr-1 w-auto" name="fid">
+                                    <option value="0"><?php echo lang('well_index'); ?></option>
+                                    <?php foreach ($all_category as $v) { ?>
+                                    <option value="<?php echo $v['fid']; ?>"><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <!--hook-->
+                            <div class="mode">
+                                <select class="custom-select mr-1 w-auto" name="mode">
+                                    <option value="-1"><?php echo lang('well_mode'); ?></option>
+                                    <option value="0"><?php echo lang('well_custom'); ?></option>
+                                    <option value="1"><?php echo lang('well_portal'); ?></option>
+                                    <option value="2"><?php echo lang('well_flat'); ?></option>
+                                </select>
+                            </div>
+                            <!--hook-->
+                            <div class="category">
+                                <select class="custom-select mr-1 w-auto" name="category">
+                                    <option value="0"><?php echo lang('well_category'); ?></option>
+                                    <option value="1"><?php echo lang('well_index'); ?></option>
+                                    <option value="2"><?php echo lang('well_channel'); ?></option>
+                                    <option value="3"><?php echo lang('well_column'); ?></option>
+                                    <option value="4"><?php echo lang('well_read_page'); ?></option>
+                                    <option value="5"><?php echo lang('well_comment'); ?></option>
+                                </select>
+                            </div>
+                            <!--hook-->
+                            <div class="flag-list">
+
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-end">
+                            <button class="btn btn-info text-white btn-sm copy"><?php echo lang('well_copy');?></button>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="message" id="message" style="height: 300px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-outline-secondary btn-sm website" id="top" href="javascript:void(0);" rel="nofollow"><?php echo lang('top');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="pagination" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_pagination');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="slides" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_slides');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="slides-double" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_double').lang('well_slides');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="list" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_list');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="flag-loop" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_loop').lang('well_flag').lang('thread');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website flag-sole" id="flag-sole" href="javascript:void(0);" rel="nofollow" style="display: none;"><?php echo lang('well_sole').lang('well_transfer').lang('well_flag').lang('thread');?></a>
+                            <div class="portal-column">
+                                <hr>
+                                <a class="btn btn-outline-secondary btn-sm website" id="portal-column" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_portal_transfer_column');?></a>
+                                <p class="small text-muted my-2">
+                                    <?php echo lang('well_portal_transfer_column_tips');?>
+                                </p>
+                            </div>
+
+                            <!-- VIP版调用<div class="rand-thread">
+                                <hr>
+                                <a class="btn btn-outline-secondary btn-sm website" id="rand-thread" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_rand').lang('thread');?></a>
+                            </div>-->
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+                <!--{hook website_admin_template_main_head_after.htm}-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--{hook website_admin_template_main_end.htm}-->
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+    var body = $("body");
+    var jfid = $('select[name="fid"]');
+    var all_category = <?php echo well_json_encode($all_category);?>;
+    var select_mode = $('select[name="mode"]');
+    var select_fid = $('select[name="fid"]');
+    var fid = select_fid.val();
+    var mode = select_mode.val();
+    var select_category = $('select[name="category"]');
+    var category = select_category.val();
+    body.on('click', 'a.website', function () {
+        var jthis = $(this);
+        var type = jthis.attr('id');
+        var textarea = $('textarea');
+        textarea.val('');
+        var fid = select_fid.val();
+        var mode = select_mode.val();
+        var category = select_category.val();
+        body.find('[name="mode"]').tooltip('dispose');
+        body.find('[name="category"]').tooltip('dispose');
+        var flagid = $('select[name="flagid"]').val();
+        body.find('[name="flagid"]').tooltip('dispose');
+
+        if (mode < 0) {
+            body.find('[name="mode"]').alert('<?php echo lang('well_select_mode');?>').focus();
+            return false;
+        }
+
+        if ((type == 'slides' || type == 'slides-double') && mode != 1) {
+            body.find('[name="mode"]').alert('<?php echo lang('well_template_top_tips');?>').focus();
+            return false;
+        }
+
+        if (type == 'list' && (mode < 1 || category < 1)) {
+            if (mode < 1) {
+                $('select[name="mode"]').val(1);
+                body.find('[name="mode"]').alert('<?php echo lang('well_select_mode');?>').focus();
+            } else if (category < 1) {
+                body.find('[name="category"]').alert('<?php echo lang('well_select_category');?>').focus();
+            }
+            return false;
+        }
+
+        if (type == 'flag-loop' && mode != 2) {
+            $('select[name="mode"]').val(2);
+            body.find('[name="mode"]').alert('<?php echo lang('well_flat_mode_flag_tips');?>').focus();
+            return false;
+        }
+
+        if (type == 'flag-loop' && category == 0) {
+            body.find('[name="category"]').alert('<?php echo lang('well_select_category');?>').focus();
+            return false;
+        }
+
+        if (type == 'flag-loop' && category == 5) {
+            body.find('[name="category"]').alert('<?php echo lang('well_category_comment_flag_tips');?>').focus();
+            return false;
+        }
+
+        if (type == 'flag-sole' && flagid == 0) {
+            body.find('[name="flagid"]').alert('<?php echo lang('well_select').lang('well_flag');?>').focus();
+            return false;
+        }
+
+        if (type == 'list' && (mode < 1 || category < 1)) {
+            if (mode < 1) {
+                $('select[name="mode"]').val(1);
+                body.find('[name="mode"]').alert('<?php echo lang('well_select_mode');?>').focus();
+            } else if (category < 1) {
+                body.find('[name="category"]').alert('<?php echo lang('well_select_category');?>').focus();
+            }
+            return false;
+        }
+
+        if (type == 'portal-column' && fid == 0) {
+            body.find('[name="fid"]').alert('<?php echo lang('well_select_column');?>').focus();
+            return false;
+        }
+
+        $.xpost(xn.url('template-main'), {type: type, fid: fid, mode: mode, category: category, flagid: flagid}, function (code, message) {
+            if (code == 0) {
+                textarea.val(message);
+            } else {
+                $.alert(message);
+            }
+        });
+        return false;
+    });
+
+    template_mode(mode, category);
+    $('select[name="category"],select[name="mode"]').on('change', function() {
+        var mode = select_mode.val();
+        var category = select_category.val();
+        template_mode(mode, category);
+    });
+    function template_mode(mode, category) {
+        if (mode == 1 && (category == 1 || category == 2)) {
+            $('.portal-column').show();
+        } else {
+            $('.portal-column').hide();
+        }
+    }
+
+    /*
+    VIP版调用
+    template_rand_thread(category);
+    select_category.on('change', function() {
+        var category = select_category.val();
+        template_rand_thread(category);
+    });
+    function template_rand_thread(category) {
+        if (category == 4) {
+            $('.rand-thread').show();
+        } else {
+            $('.rand-thread').hide();
+        }
+    }*/
+
+    var fid = jfid.val();
+    fid_on_change(fid);
+
+    jfid.on('change', function() {
+        var fid = jfid.val();
+        fid_on_change(fid);
+    });
+
+    /* 当选择栏目时，加载对应需要加载的代码 */
+    function fid_on_change(fid) {
+
+        var flag_list = $('.flag-list');
+
+        if (!xn.isset(all_category[fid])) {
+            flag_list.hide();
+            return false;
+        }
+
+        var category = all_category[fid];
+        if (xn.isset(category.well_flag_text)) {
+        var s = '<select class="custom-select mr-1 w-auto" name="flagid">';
+            s += ' <option value="0"><?php echo lang('well_flag'); ?></option>';
+            $.each(category.well_flag_text, function(k, flag) {
+                s += '<option value="'+ flag.flagid +'">' + flag.name + '</option>';
+            });
+            s += '</select>';
+            flag_list.html(s).show();
+            $('.flag-sole').show();
+        } else {
+            flag_list.hide();
+            $('.flag-sole').hide();
+            /* 属性相关的都隐藏 */
+        }
+    }
+
+    $('#nav li.nav-item-template,#menu a.menu-main').addClass('active');
+</script>
+<script>
+    $.require('../plugin/well_cms_x/view/js/clipboard.min.js', function() {
+        var clipboard = new Clipboard('.copy', {
+            text: function() {
+                return $('textarea').val();
+            }
+        });
+        clipboard.on('success', function(e) {
+            alert('<?php echo lang('well_copy_successfuly');?>');
+        });
+        /*clipboard.on('error', function(e) {
+            console.log(e);
+        });*/
+    });
+</script>
+<!--{hook website_admin_template_main_js.htm}-->

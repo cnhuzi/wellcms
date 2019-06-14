@@ -1,0 +1,32 @@
+<!--
+根据栏目fid，单一调用当前栏目设置为显示的属性和属性下的主题
+-->
+<?php if(iseet($flaglist[$flagid])){ ?>
+<!-- d-none d-lg-block 仅在大屏幕下显示 -->
+<div class="card d-none d-lg-block aside">
+    <div class="card-header">
+        <h3 class="font-weight-bold">
+            <!-- 属性链接 -->
+            <a href="<?php echo $_flag['url'];?>" title='<?php echo $_flag['name'];?>' aria-label='<?php echo $_flag['name'];?>'>
+            <!-- 属性名 -->
+            <?php echo $_flag['name']; ?>
+            </a>
+        </h3>
+    </div>
+    <!-- nowrap 和 ellipsis 配合使用，字数超出长度时，自动用点代替 -->
+    <ul class="list-unstyled threadlist mx-3 mb-1 nowrap">
+        <!-- 循环输出属性下的主题 -->
+        <?php foreach($flaglist[$flagid]['list'] as $_thread) { ?>
+        <li class="thread py-2">
+            <h4 class="m-0">
+                <!-- 主题链接 -->
+                <a href="<?php echo $_thread['url'];?>" class="d-block ellipsis" <?php echo ($_thread['link']?'rel="nofollow" target="_blank"':''); ?> title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                <!-- 主题 -->
+                <?php echo $_thread['subject'];?>
+                </a>
+            </h4>
+        </li>
+        <?php } ?>
+    </ul>
+</div>
+<?php } ?>

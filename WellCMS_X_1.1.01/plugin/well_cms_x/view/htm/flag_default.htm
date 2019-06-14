@@ -1,0 +1,72 @@
+<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/header.inc.htm');?>
+
+<!--{hook website_flag_start.htm}-->
+
+<div class="row">
+	<div class="col-lg-12">
+		<!--{hook website_flag_breadcrumb_before.htm}-->
+		<?php if(empty($hide_breadcrumb)) { ?>
+		<ol class="breadcrumb d-none d-md-flex text-muted">
+			<li class="breadcrumb-item"><a href="./"><i class="icon-home" aria-hidden="true"></i></a></li>
+			<li class="breadcrumb-item">
+				<a href="<?php echo $header['mobile_link'];?>"><?php echo lang('well_flag');?></a>
+			</li>
+			<li class="breadcrumb-item"><?php echo lang('well_list');?></li>
+			<!--{hook website_flag_breadcrumb.htm}-->
+		</ol>
+		<?php } ?>
+		<!--{hook website_flag_breadcrumb_after.htm}-->
+		<div class="card card-threadlist">
+			<div class="card-body">
+				<table class="table table-bordered text-center">
+					<tbody>
+					<tr>
+                        <!--{hook website_flag_td_flag_before.htm}-->
+						<td><?php echo lang('well_flag');?></td>
+                        <!--{hook website_flag_td_flag_after.htm}-->
+						<td><?php echo lang('well_column');?></td>
+                        <!--{hook website_flag_td_forum_after.htm}-->
+						<td class="hidden-sm hidden-md"><?php echo lang('well_thread_count');?></td>
+                        <!--{hook website_flag_td_count_after.htm}-->
+						<td class="hidden-sm hidden-md"><?php echo lang('well_create_date');?></td>
+                        <!--{hook website_flag_td_date_after.htm}-->
+					</tr>
+					<?php if(!empty($arrlist)){ foreach($arrlist as $k => &$v) {?>
+					<tr class="tap" data-href="<?php echo $v['url']; ?>">
+                        <!--{hook website_flag_list_name_before.htm}-->
+                        <td class="break-all">
+                            <a href="<?php echo $v['url']; ?>"><?php echo $v['name'];?></a>
+						</td>
+                        <!--{hook website_flag_list_name_after.htm}-->
+						<td>
+							<a href="<?php echo $v['forum_url']; ?>"><?php echo $v['column_name'];?></a>
+						</td>
+                        <!--{hook website_flag_list_column_name_after.htm}-->
+						<td class="hidden-sm hidden-md">
+							<?php echo $v['count'];?>
+						</td>
+                        <!--{hook website_flag_list_date_before.htm}-->
+						<td class="hidden-sm hidden-md">
+							<?php echo $v['create_date_text'];?>
+						</td>
+                        <!--{hook website_flag_list_date_after.htm}-->
+					</tr>
+					<?php }} ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!--{hook website_flag_page_before.htm}-->
+		<?php if ($pagination) { ?>
+		<nav class="my-3"><ul class="pagination justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+		<?php } ?>
+		<!--{hook website_flag_page_after.htm}-->
+	</div>
+</div>
+
+<!--{hook website_flag_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/footer.inc.htm');?>
+
+<!--{hook website_flag_js.htm}-->

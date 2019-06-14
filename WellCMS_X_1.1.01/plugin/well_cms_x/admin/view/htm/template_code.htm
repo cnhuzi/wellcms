@@ -1,0 +1,247 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+<!--{hook website_admin_template_code_start.htm}-->
+
+<div class="row">
+	<div class="col-12">
+		<div class="btn-group mb-3" role="group">
+			<?php echo admin_tab_active($menu['template']['tab'], 'code');?>
+		</div>
+	</div>
+</div>
+<!--{hook website_admin_template_code_before.htm}-->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card card-threadlist">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs column">
+                    <!--{hook website_admin_template_code_header_start.htm}-->
+                    <li class="nav-item">
+                        <a id="introduction" class="nav-link active" href="javascript:void(0);"><?php echo lang('well_brief');?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="bootstrap" class="nav-link" href="javascript:void(0);">Bootstrap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="code" class="nav-link" href="javascript:void(0);"><?php echo lang('well_code');?></a>
+                    </li>
+                    <!--{hook website_admin_template_code_header_end.htm}-->
+                </ul>
+            </div>
+			<div class="card-body">
+                <div class="row display-none introduction">
+                    <div class="col-12">
+                        <p>
+                            WellCMS 前端和后端模板以 Bootstrap 4.0 和 JQuery 3.1.0 (支持JQuery更高版本) 制作，遵照 Bootstrap 4 的 UI 规范，基本未写过 style，尽量用 class 搞定。Bootstrap 是全球最受欢迎的前端组件库，用于开发响应式布局、移动设备优先的 WEB 项目。仅需具备 HTML 、 CSS 和 JavaScript 的基础知识，利用 WellCMS 给出的代码组合，就可以创建自己的网站模板。
+                        </p>
+                        <p>
+                            制作模板前，您务必了解bootstrap 4.0 ，或者具备html/CSS/JS基础知识。
+                        </p>
+                        <p>
+                            一个完整的页面有两个部分：页头head和主体body；主体可在分为：主要main和页脚footer。
+                        </p>
+                        <p>
+                            在开发模板的时候把代码拆，单独存放。如：head、header、main、footer四个部分，此时除了改动 main 部分代码外，其他代码无需再改动，作为公用文件，直接在 mian 代码页引用其他三个部分，即可形成一个完整的页面。
+                        </p>
+                        <p>
+                            <strong>再开发模板前，先设计好整体页面结构，然后在 WellCMS 后台获得代码，复制粘贴到您建立的htm文件相对应位置保存即可，根据自己的需要，也可进行二次修改代码。</strong>
+                        </p>
+                        <p>
+                            <strong>模板中的注释无需去掉，程序加载时会自动去掉注释并压缩代码。</strong>
+                        </p>
+                        <pre>
+<?php echo $introduction;?>
+                        </pre>
+                    </div>
+                </div>
+                <!--{hook website_admin_template_code_introduction_after.htm}-->
+                <div class="row display-none bootstrap" style="display: none;">
+                    <div class="col-12">
+                        <p>
+                            布局容器
+                            Bootstrap 需要为页面内容和栅格系统包裹一个 .container 容器。BS提供了两个作此用处的类。注意，由于 padding 等属性的原因，这两种容器类不能互相嵌套。
+                        </p>
+                        <p>
+                            .container 类用于固定宽度并支持响应式布局的容器。
+                        </p>
+                        <p>
+<?php
+echo htmlspecialchars(file_get_contents_try($path.'container.htm'));
+?>
+                        </p>
+                        <hr>
+                        <p>
+                            .container-fluid 类用于 100% 宽度，占据全部视口（viewport）的容器。
+                        </p>
+                        <p>
+                            <?php
+echo htmlspecialchars(file_get_contents_try($path.'container-fluid.htm'));
+?>
+                        </p>
+                        <hr>
+                        <p>
+                            hidden-md hidden-lg  (在 md lg 下隐藏）
+                        </p>
+                        <p>
+                            hidden-sm hidden-md (在 sm md 隐藏）
+                        </p>
+                        <hr>
+                        <p>
+                            填充padding：p-0; px-1, py-1, pl-1, pr-1。值为0 1 2 3 4
+                        </p>
+                        <hr>
+                        <p>
+                            边距margin：m-0; mx-1, my-1, ml-1, mr-1。值为0 1 2 3 4
+                        </p>
+                        <hr>
+                        <p>
+                            div 块左右居中，设定宽度后，布局居中 class="mx-auto"，此处并非文字居中。如
+                            <br><span><</span>div class="row">
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div class="col-md-6 mx-auto">
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>/div<span>></span>
+                            <br><span><</span>/div<span>></span>
+
+                        </p>
+                        <hr>
+                        <p>
+                            flex 两列布局，一列自动撑开：
+                            <br>
+                            <br>
+                            第一种：
+                            <br><span><</span>div class="media">
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div><span>left<</span>/div<span>></span>
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div class="media-body"><span>right<</span>/div<span>></span>
+                            <br><span><</span>/div<span>></span>
+                            <br>
+                            <br>
+                            第二种：左右对齐的方式，跟上面不同，它类似 inline 模式，内缩，而不是撑满：
+                            <br><span><</span>div class="row justify-content-between m-0">
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div><span>left<</span>/div<span>></span>
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div><span>right<</span>/div<span>></span>
+                            <br><span><</span>/div<span>></span>
+                            <br>
+                            <br>
+                            第三种：左自适应宽度，右余量完整填充（推荐）：
+                            <br><span><</span>div class="d-flex">
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div><span>Left<</span>/div<span>></span>
+                            <br><span>&nbsp;&nbsp;&nbsp;&nbsp;<</span>div class="col"><span>Right, Full Fill <</span>/div<span>></span>
+                            <br><span><</span>/div<span>></span>
+                        </p>
+                        <!--<hr>
+                        <p>
+                            CSS 可引用<br>
+                            <span><</span>link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+                        </p>
+                        <hr>
+                        <p>
+                            JS 可引用<br>
+                            <span><</span>script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"><span><</span>/script>
+                            <br>
+                            <span><</span>script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"><span><</span>/script>
+                            <br>
+                            <span><</span>script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"><span><</span>/script>
+                        </p>-->
+                        <hr>
+                        <p>
+                            其他更多可到bootstrap官方了解
+                            <br>https://getbootstrap.com/docs/4.0/components/alerts/
+                            <br>或者<br>
+                            https://v4.bootcss.com/docs/4.0/getting-started/introduction/
+                        </p>
+                    </div>
+                </div>
+                <!--{hook website_admin_template_code_bootstrap_after.htm}-->
+                <div class="row display-none code" style="display: none;">
+                    <div class="col-12">
+                        <div class="form-group d-flex justify-content-end">
+                            <button class="btn btn-info text-white btn-sm copy"><?php echo lang('well_copy');?></button>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="message" id="message" style="height: 300px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-outline-secondary btn-sm website" id="complete-header" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_complete_head');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="top-header" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_header');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="head" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_head').lang('well_code');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="bottom-footer" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_complete_footer');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="footer-inc" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_footer');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="find-nav" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_nav').lang('well_code');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="login" href="javascript:void(0);" rel="nofollow"><?php echo lang('login');?></a>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <?php echo lang('well_flat');?>
+                                </div>
+                            </div>
+                            <a class="btn btn-outline-secondary btn-sm website" id="flat-complete-main" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_index');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="flat-complete-list" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_list');?></a>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <?php echo lang('well_portal');?>
+                                </div>
+                            </div>
+                            <a class="btn btn-outline-secondary btn-sm website" id="portal-complete-main" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_index');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="portal-complete-category" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_channel');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="portal-complete-list" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_list');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="read" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_content_page');?></a>
+                        </div>
+                    </div>
+                </div>
+                <!--{hook website_admin_template_code_after.htm}-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--{hook website_admin_template_code_end.htm}-->
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+    var body = $("body");
+    var header_nav = $("ul.column");
+    var header_nav_a = header_nav.find('li a');
+    header_nav_a.on('click', function () {
+        var jthis = $(this);
+        header_nav_a.removeClass('active');
+        $(".display-none").hide();
+        jthis.addClass('active');
+        var id = jthis.attr("id");
+        $('.' + id).show();
+    });
+
+    body.on('click', 'a.website', function () {
+        /*$('.default').remove();*/
+        var jthis = $(this);
+        var id = jthis.attr('id');
+        var textarea = $('textarea');
+        $.xpost(xn.url('template-code'), {id: id}, function (code, message) {
+            if (code == 0) {
+                textarea.val(message);
+            } else {
+                $.alert(message);
+            }
+        });
+        return false;
+    });
+
+    $('#nav li.nav-item-template').addClass('active');
+</script>
+
+<script>
+    $.require('../plugin/well_cms_x/view/js/clipboard.min.js', function() {
+        var clipboard = new Clipboard('.copy', {
+            text: function() {
+                return $('textarea').val();
+            }
+        });
+        clipboard.on('success', function(e) {
+            alert('<?php echo lang('well_copy_successfuly');?>');
+        });
+        /*clipboard.on('error', function(e) {
+            console.log(e);
+        });*/
+    });
+</script>
+<!--{hook website_admin_template_code_js.htm}-->

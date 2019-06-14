@@ -1,0 +1,382 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+<!--{hook website_admin_content_post_start.htm}-->
+
+<div class="row">
+	<div class="col-12">
+		<div class="btn-group mb-3" role="group">
+			<?php echo admin_tab_active($menu['content']['tab'], 'list');?>
+		</div>
+	</div>
+</div>
+<!--{hook website_admin_content_post_before.htm}-->
+<div class="row">
+	<div class="col-lg-12">
+		<!--{hook website_admin_content_post_breadcrumb_before.htm}-->
+		<?php if(empty($hide_breadcrumb)) { ?>
+		<ol class="breadcrumb d-none d-md-flex text-muted">
+			<li class="breadcrumb-item"><a href="<?php echo url('content-list');?>"><i class="icon-home" aria-hidden="true"></i></a></li>
+			<?php if ($fid) { ?>
+			<li class="breadcrumb-item"><?php echo $forum['name'];?></li>
+			<?php } ?>
+            <li class="breadcrumb-item"><?php echo $breadcrumb_flag;?></li>
+			<!--{hook website_admin_content_post_breadcrumb.htm}-->
+		</ol>
+		<?php } ?>
+		<!--{hook website_admin_content_post_breadcrumb_after.htm}-->
+		<div class="card card-threadlist">
+			<div class="card-body">
+                <!--{hook website_admin_content_post_form_start.htm}-->
+                <?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/thread_post.inc.htm');?>
+                <!--{hook website_admin_content_post_form_end.htm}-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--{hook website_admin_content_post_end.htm}-->
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+    /* 模型 */
+    var model = <?php echo $model;?>;
+    /* 主题 */
+    var tid = <?php echo isset($tid) ? intval($tid) : 0; ?>;
+    var forumlist = <?php echo well_json_encode($forumlist);?>;
+    var index_flag_list = <?php echo well_json_encode($index_flag);?>;
+
+    /*初始化值，选中的值*/
+    var forum_flagids = <?php echo well_json_encode($forum_flagids);?>;
+    var category_flagids = <?php echo well_json_encode($category_flagids);?>;
+    var index_flagids = <?php echo well_json_encode($index_flagids);?>;
+    var action = '<?php echo $action;?>';
+
+    var jfid = $('select[name="fid"]');
+    var fid = <?php echo intval($fid); ?> || $('select[name="fid"]').val();
+    jfid.on('change', function() {
+        var fid = jfid.val();
+        fid_on_change(fid);
+    });
+
+    fid_on_change(fid);
+
+    /* 当选择栏目时，加载对应需要加载的代码 */
+    function fid_on_change(fid) {
+        var forum = forumlist[fid];
+
+        <!--{hook website_admin_content_js_on_change_start.htm}-->
+
+        /* 如果不是文章模型 则跳转重新加载添加内容界面 */
+        if (forum.well_model != model) {
+            if (action == 'create') {
+                window.location = xn.url('content-' + action + '-' + fid);
+            } else {
+                window.location = xn.url('content-' + action + '-' + tid);
+            }
+            return false;
+        }
+
+        <!--{hook website_admin_content_js_on_change_middle.htm}-->
+
+        var s = '<div class="col-lg-12">';
+        var fup = forumlist[forum.well_fup];
+        if (!xn.empty(forum.well_fup) && !xn.empty(fup.well_flag)) {
+            s += ' <p class="font-weight-bold mb-2"><?php echo lang('well_channel_flag');?></p>';
+            s += '<p class="tag-outline-list">';
+            $.each(fup.well_flag_text, function(k, flag) {
+                s += '<a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm mr-3 mb-2 flag-option ' + (xn.in_array(flag.flagid, category_flagids) ? 'active' : '') + '" flagid="' + flag.flagid + '">' + flag.name + '</a>';
+                s += '<input type="hidden" name="category[]" value="' + (xn.in_array(flag.flagid, category_flagids)) + '" />';
+            });
+            s += '</p>';
+        }
+
+        if (xn.isset(forum.well_flag_text)) {
+            s += ' <p class="font-weight-bold mb-2"><?php echo lang('well_forum_flag');?></p>';
+            s += '<p class="tag-outline-list mb-0">';
+            $.each(forum.well_flag_text, function(k, flag) {
+                s += '<a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm mr-3 mb-2 flag-option ' + (xn.in_array(flag.flagid, forum_flagids) ? 'active' : '') + '" flagid="' + flag.flagid + '">' + flag.name + '</a>';
+                s += '<input type="hidden" name="forum[]" value="' + (xn.in_array(flag.flagid, forum_flagids) ? flag.flagid : '') + '" />';
+            });
+            s += '</p>';
+        }
+        s += '</div>';
+        $('.flag-list').html(s);
+
+        <!--{hook website_admin_content_js_on_change_end.htm}-->
+    }
+
+    <?php if (!empty($index_flag)) { ?>
+        index_flag();
+    <?php } ?>
+
+    function index_flag() {
+        var s = '<div class="col-lg-12">';
+        s += ' <p class="font-weight-bold pt-0 mb-2"><?php echo lang('well_index_flag');?></p>';
+        s += '<p class="tag-outline-list">';
+        $.each(index_flag_list, function(k, flag) {
+            s += '<a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm mr-3 mb-2 flag-option ' + (xn.in_array(flag.flagid, index_flagids) ? 'active' : '') + '" flagid="' + flag.flagid + '">' + flag.name + '</a>';
+            s += '<input type="hidden" name="index[]" value="' + (xn.in_array(flag.flagid, index_flagids) ? flag.flagid : '') + '" />';
+        });
+        s += '</p>';
+        s += '</div>';
+        $('.index-flag-list').html(s);
+    }
+
+    $('.flag-list,.index-flag-list').on('click', 'a.flag-option', function() {
+        var jthis = $(this);
+        var flagid = jthis.attr('flagid');
+        jthis.toggleClass('active');
+        /*隐藏域*/
+        var v = jthis.hasClass('active') ? flagid : '';
+        jthis.next().attr('value', v);
+    });
+
+    var jform = $('#form');
+    var jsubmit = $('#submit');
+    jform.on('submit', function() {
+        jform.reset();
+        jsubmit.button('loading');
+        var postdata = jform.serialize();
+        var fid = jfid.val();
+        $.xpost(jform.attr('action'), postdata, function(code, message) {
+            if(code == 0) {
+                $.alert(message);
+                jsubmit.button(message).delay(1000).location(xn.url('content-list-' + fid));
+            } else if(xn.is_number(code)) {
+                $.alert(message);
+                jsubmit.button('reset');
+            } else {
+                $.alert(message);
+                /*jform.find('[name="'+code+'"]').alert(message).focus();*/
+                jsubmit.button('reset');
+            }
+        });
+        return false;
+    });
+
+    var addicon = $('.addicon');
+    addicon.on('change', 'input[type="file"]', function(e) {
+
+        var jfile = $(this);
+        var jassoc = jfile.data('assoc') ? $('#'+jfile.data('assoc')) : null;
+        var n = $('img#'+jfile.data('assoc')).attr('n');
+        var files = xn.get_files_from_event(e);
+        if (!files) return;
+
+        var fid = jfid.val();
+        var forum = forumlist[fid];
+        var picture_size = forum.well_picture_size;
+
+        $.each_sync(files, function (i, callback) {
+            var file = files[i];
+            xn.upload_file(file, xn.url('../' + 'attach-website_create'), {
+                type: 1,
+                is_image: 1,
+                convert: 1, /*转码*/
+                filetype: 'jpeg',   /*压缩类型*/
+                qulity: '0.7',  /*压缩比例*/
+                width: picture_size.width || "<?php echo $pic_width; ?>",
+                height: picture_size.height || "<?php echo $pic_height; ?>",
+                action: 'clip', /*clip裁切 thumb缩放*/
+                n: n,
+                upload_file: 1,
+                water_image_url:'../view/img/water-small.png',
+            }, function (code, message) {
+                if (code != 0) return $.alert(message);
+                /*替换到图片位置*/
+                var url = message.url;
+                jassoc.attr('src', '../' + url);
+                /*jassoc.css('max-width',150);
+                 jassoc.css('height','auto');*/
+                callback();
+            }, function (percent) {
+                /*percent = xn.intval(percent);
+                 jprogressbar.css('width', percent+'%');
+                 jprogressbar.text(percent+'%');
+                 jprogress.show();
+                 console.log('progress:'+ percent);*/
+            }, function (base64_data) {
+                /*base64_data 用来显示缩略图*/
+            });
+        });
+    });
+
+    var jattachparent = $('.attachlist_parent');
+    $('#addattach').on('change', function(e) {
+        var files = xn.get_files_from_event(e);
+        if (!files) return;
+
+        /*并发下会 服务端 session 写入会有问题，由客户端控制改为串行*/
+        if (!jattachparent.find('.attachlist').length) {
+            jattachparent.append('<fieldset class="fieldset"><legend><?php echo lang('uploaded_attach');?></legend><ul class="attachlist"><ul></fieldset>');
+        }
+
+        var jprogress = jattachparent.find('.progress');
+        if(!jprogress.length) {
+            jprogress = $('<div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div>').appendTo(jattachparent);
+        }
+        jprogressbar = jprogress.find('.progress-bar');
+
+        $.each_sync(files, function(i, callback) {
+            var file = files[i];
+            xn.upload_file(file, xn.url('../' + 'attach-website_create'), {is_image: 0}, function (code, message) {
+                if (code != 0) return $.alert(message);
+                /*把文件 append 到附件列表*/
+                var url = message.url;
+                var filetype = message.filetype;
+                var aid = message.aid;
+                $('.attachlist').append('<li aid="' + aid + '"><a href="' + message.url + '" target="_blank"><i class="icon filetype ' + filetype + '"></i> ' + message.orgfilename + '</a> <a href="javascript:void(0);" class="delete ml-2"><i class="icon-remove"></i> <?php echo lang('delete');?></a></li>');
+                callback();
+                jprogress.hide();
+            }, function(percent) {
+                percent = xn.intval(percent);
+                jprogressbar.css('width', percent+'%');
+                jprogressbar.text(percent+'%');
+                jprogress.show();
+                console.log('progress:'+ percent);
+            });
+        });
+    });
+
+    /*删除附件*/
+    jattachparent.on('click', 'a.delete', function() {
+        var jlink = $(this);
+        var jli = jlink.parents('li');
+        var aid = jli.attr('aid');
+        if(!window.confirm(lang.confirm_delete)) return false;
+        $.xpost('../' + xn.url('attach-website_delete-'+aid), function(code, message) {
+            if(code != 0) return $.alert(message);
+            jlink.parent().remove();
+        });
+        return false;
+    });
+
+    var jbrief = $('#brief');
+    jbrief.on('focus', function() {if(jbrief.t) { clearTimeout(jbrief.t); jbrief.t = null; } jbrief.css('height', '5rem'); });
+    jbrief.on('blur', function() {jbrief.t = setTimeout(function() { jbrief.css('height', '2.5rem');}, 1000); });
+
+    var input_link = $('input[name="link"]');
+    input_link.on('click', function () {
+        var message = $('.message,.keyword');
+        var description = $('.description');
+        if ($(this).checked() == true) {
+            message.hide(300);
+            description.attr('placeholder', "<?php echo lang('well_url_link');?>")
+        } else {
+            message.show(300);
+            description.attr('placeholder', "SEO<?php echo lang('well_description') . lang('well_exceed limit_will_be_intercepted', array('n' => 120)) .'('.lang('well_description_empty_use_brief').')';?>")
+        }
+    });
+
+    var input_tag = $('input[name="tag"]');
+    var input_tags = $('input[name="tags"]');
+    $("#tag").bind("input propertychange", function () {
+        var jthis = $(this);
+        var str = jthis.val();
+        /*var str = $.trim(str);*/
+        if (str.indexOf(',') != -1 || str.indexOf('，') != -1 || str.indexOf(' ') != -1) {
+            str = well_replace_str(str);
+            if (str) {
+                well_taglist_filter(str);
+                var tagstr = input_tags.val();
+                var tagstr = xn.str_replace(str + ',', '', tagstr);
+                input_tags.val(tagstr + str + ',');
+                var taglist = $('div.taglist');
+                var span = taglist.find('span');
+                jclone = span.last().clone();
+                jclone.insertAfter(span.last());
+                jclone.removeClass('d-none');
+                jclone.text(str);
+            }
+            jthis.val('');
+        }
+        jthis.blur(function () {
+            /*获取离开后的值*/
+            var str = jthis.val();
+            str = well_replace_str(str);
+            if (str) {
+                well_taglist_filter(str);
+                var tagstr = input_tags.val();
+                var tagstr = xn.str_replace(str + ',', '', tagstr);
+                input_tags.val(tagstr + str + ',');
+                var taglist = $('div.taglist');
+                var span = taglist.find('span');
+                jclone = span.last().clone();
+                jclone.insertAfter(span.last());
+                jclone.removeClass('d-none');
+                jclone.text(str);
+            }
+            jthis.val('');
+        });
+    });
+
+    jform.on('click', '.tag', function () {
+        var jthis = $(this);
+        var text = $.trim(jthis.text());
+        var tagstr = input_tags.val();
+        var tagstr = xn.str_replace(text + ',', '', tagstr);
+        /*input_tags.val(tagstr);*/
+        /*复制 然后 赋值*/
+        var input = input_tag.clone();
+        var input = input.val(text);
+        jthis.html(input);
+        input.focus();
+        jthis.removeClass('border border-secondary tag btn-sm');
+
+        input.blur(function () {
+            /*获取离开后的值*/
+            var text = $(this).val();
+            text = well_replace_str(text);
+            if (text) {
+                well_taglist_filter(text);
+                text = text + ',';
+                /*拼接*/
+                jthis.html($(this).val());
+                jthis.addClass('border border-secondary tag btn-sm');
+            } else {
+                text = '';
+                jthis.removeDeep();
+            }
+            input_tags.val(tagstr + text);
+        });
+    });
+
+    function well_replace_str(str) {
+        str = xn.str_replace('，', '', str);
+        str = xn.str_replace(',', '', str);
+        str = xn.str_replace(' ', '', str);
+        return str;
+    }
+
+    function well_taglist_filter(text) {
+        $('.taglist > span').each(function () {
+            var sthis = $(this);
+            var val = sthis.text();
+            if (val == text) sthis.removeDeep();
+        });
+    }
+
+    jform.find('[name="fid"]').checked(<?php echo $fid;?>);
+
+    $('#nav li.nav-item-content').addClass('active');
+</script>
+<?php if (well_check_plugin('xn_umeditor')) { ?>
+<link href="../plugin/xn_umeditor/umeditor/themes/default/css/umeditor.css<?php echo $static_version;?>" type="text/css" rel="stylesheet" />
+<link href="../plugin/xn_umeditor/umeditor/umeditor-bbs.css<?php echo $static_version;?>" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="../plugin/xn_umeditor/umeditor/umeditor.config.js<?php echo $static_version;?>"></script>
+<script type="text/javascript" src="../plugin/xn_umeditor/umeditor/umeditor.js<?php echo $static_version;?>"></script>
+<script type="text/javascript" src="../plugin/xn_umeditor/umeditor/umeditor-insertcode.js<?php echo $static_version;?>"></script>
+<script type="text/javascript" src="../plugin/xn_umeditor/umeditor/umeditor-bbs.js<?php echo $static_version;?>"></script>
+<script type="text/javascript" src="../plugin/xn_umeditor/umeditor/lang/zh-cn/zh-cn.js<?php echo $static_version;?>"></script>
+<script>
+    if(typeof jform != 'unefined') jform.find('[name="doctype"]').val(0);
+    var xn_sbform=$('#message').parents('form');  /*获取文本框message所在form表单*/
+    xn_sbform.on('submit',function(){UM.getEditor('message').sync();}); /*给submit挂载同步事件*/
+    var xn_sbdata=$._data(xn_sbform[0],'events').submit; /*获取form表单submit事件列表*/
+    xn_sbdata.splice(0,0,xn_sbdata.pop()); /*把同步事件优先级设到最前*/
+    window.UMEDITOR_CONFIG.upload_url = '../' + xn.url('attach-website_create-1');
+    $('.fixed-top').css('z-index','998');
+</script>
+<!--{hook plugin_umeditor_js_css_after.htm}-->
+<?php }?>
+<!--{hook website_admin_content_post_js.htm}-->

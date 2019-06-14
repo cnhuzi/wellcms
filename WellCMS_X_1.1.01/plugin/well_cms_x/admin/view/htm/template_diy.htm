@@ -1,0 +1,111 @@
+<?php include _include(ADMIN_PATH.'view/htm/header.inc.htm');?>
+
+<!--{hook website_admin_template_code_start.htm}-->
+
+<div class="row">
+    <div class="col-12">
+        <div class="btn-group mb-3" role="group">
+            <?php echo admin_tab_active($menu['template']['tab'], 'diy');?>
+        </div>
+    </div>
+</div>
+<!--{hook website_admin_template_code_after.htm}-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-threadlist">
+            <?php include _include(APP_PATH.'plugin/well_cms_x/admin/view/htm/template_header.inc.htm');?>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row d-flex justify-content-between mx-0 mb-3">
+                            <div>
+                                <select class="custom-select mr-1 w-auto" name="fid">
+                                    <option value="0"><?php echo lang('well_select'); ?></option>
+                                    <?php foreach ($all_category as $v) { ?>
+                                    <option value="<?php echo $v['fid']; ?>"><?php echo $v['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div>
+                                <button class="btn btn-info text-white btn-sm copy"><?php echo lang('well_copy');?></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="message" id="message" style="height: 300px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-outline-secondary btn-sm website" id="title" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_title');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="keyword" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_keywords');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="description" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_description');?></a>
+                            <hr>
+                            <a class="btn btn-outline-secondary btn-sm website" id="register_url" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_register_url');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="register_complete" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_register_complete');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="register" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_register');?></a>
+                            <hr>
+                            <a class="btn btn-outline-secondary btn-sm website" id="login_url" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_login_url');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="login_complete" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_login_complete');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="login" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_login');?></a>
+                            <hr>
+                            <a class="btn btn-outline-secondary btn-sm website" id="navs" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_nav');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="nav_url" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_nav_url');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="column_url" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_column_url');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="column_name" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_column_name');?></a>
+                            <hr>
+                            <a class="btn btn-outline-secondary btn-sm website" id="list" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_list');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="read" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_content_page');?></a>
+                            <a class="btn btn-outline-secondary btn-sm website" id="comment" href="javascript:void(0);" rel="nofollow"><?php echo lang('well_comment');?></a>
+                        </div>
+                    </div>
+                </div>
+                <!--{hook website_admin_template_code_head_after.htm}-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--{hook website_admin_template_code_end.htm}-->
+
+<?php include _include(ADMIN_PATH.'view/htm/footer.inc.htm');?>
+
+<script>
+    var body = $("body");
+    body.on('click', 'a.website', function () {
+        var jthis = $(this);
+        var type = jthis.attr('id');
+        var textarea = $('textarea');
+        var fid = $('select[name="fid"]').val();
+
+        if (type == 'nav_url' && fid == 0) {
+            body.find('[name="fid"]').alert('<?php echo lang('well_select').lang('well_column');?>').focus();
+            textarea.val('');
+            return false;
+        }
+
+        $.xpost(xn.url('template-diy'), {type: type, fid: fid}, function (code, message) {
+            if (code == 0) {
+                textarea.val(message);
+            } else {
+                $.alert(message);
+            }
+        });
+        return false;
+    });
+
+    $('#nav li.nav-item-template,#menu a.menu-diy').addClass('active');
+</script>
+<script>
+    $.require('../plugin/well_cms_x/view/js/clipboard.min.js', function() {
+        var clipboard = new Clipboard('.copy', {
+            text: function() {
+                return $('textarea').val();
+            }
+        });
+        clipboard.on('success', function(e) {
+            alert('<?php echo lang('well_copy_successfuly');?>');
+        });
+        /*clipboard.on('error', function(e) {
+            console.log(e);
+        });*/
+    });
+</script>
+<!--{hook website_admin_template_code_js.htm}-->

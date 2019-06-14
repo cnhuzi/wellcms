@@ -1,0 +1,12 @@
+{
+    "name": "WellCMS X Free",
+    "brief": "WellCMS是一款倾向于移动端的内容管理产品，基于优秀的XiunoPHP开发，以轻、快、安全为主，作者在此基础上进行了再次增强，其目的是榨干硬件的全部运算性能。<br><br>WellCMS X 版本中的X取自“Extreme”，意为“轻便到了极点”。X意味着追求极致；意味着自由飞翔，需要轻盈的体态；意味着将程序的性能发挥到极限。<br><br>X系列产品具有高效、安全、稳定、速度快、SEO更简单、负载超强的特点。",
+    "version": "1.1.01",
+    "software_version": "1.0.0",
+    "bbs_version": "4.0.4",
+    "installed": 1,
+    "enable": 1,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": []
+}

@@ -1,0 +1,85 @@
+<!--
+内容页评论列表，只能在内容页中使用，如需其他调用，则需要修改多处代码
+-->
+<?php
+empty($allowupdate) AND $allowupdate = 0;
+empty($allowdelete) AND $allowdelete = 0;
+empty($allowpost) AND $allowpost = 0;
+?>
+<!--{hook website_reply_list_inc_start.htm}-->
+
+<?php if($postlist) { foreach($postlist as $_post) { ?>
+<li class="row <?php echo $_post['classname'];?>" data-pid="<?php echo $_post['pid'];?>" data-uid="<?php echo $_post['uid'];?>">
+    <div class="col-lg-12 d-flex justify-content-between small text-muted">
+        <div>
+            <!-- 评论用户头像 -->
+            <!--{hook website_reply_list_inc_avatar_before.htm}-->
+            <a href="<?php echo url('user-' . $_post['uid']);?>" class="mr-2" tabindex="-1">
+                <img class="avatar-1" src="<?php echo $_post['user_avatar_url'];?>">
+            </a>
+
+            <!-- 评论用户名 -->
+            <!--{hook website_reply_list_inc_username_before.htm}-->
+            <span class="username">
+                <a href="<?php echo url('user-' . $_post['uid']);?>" class="text-muted font-weight-bold">
+                    <?php echo $_post['username'];?>
+                </a>
+            </span>
+            <!--{hook website_reply_list_inc_username_after.htm}-->
+
+            <!-- 评论时间 -->
+            <!--{hook website_reply_list_inc_create_date_before.htm}-->
+            <span class="date text-grey ml-2">
+                <?php echo $_post['create_date_fmt'];?>
+            </span>
+            <!--{hook website_reply_list_inc_create_date_after.htm}-->
+        </div>
+        <div class="text-right text-grey">
+            <!-- 评论引用 -->
+            <!--{hook website_reply_list_inc_quote_before.htm}-->
+            <?php if($allowpost) { ?>
+            <a href="javascript:void(0)" data-tid="<?php echo $_post['tid'];?>" data-pid="<?php echo $_post['pid'];?>" class="text-grey post_reply mr-3">
+                <i class="icon-reply" title="<?php echo lang('quote');?>"></i>
+                <span class="d-none">
+                    <?php echo lang('quote');?>
+                </span>
+            </a>
+            <?php } ?>
+            <!--{hook website_reply_list_inc_quote_after.htm}-->
+
+            <!-- 评论管理权限 -->
+            <!--{hook website_reply_list_inc_delete_before.htm}-->
+            <?php if($allowdelete || $_post['allowdelete']) { ?>
+            <a data-href="<?php echo url('reply-delete-'.$_post['pid']);?>" data-confirm-text="<?php echo lang('confirm_delete');?>" href="javascript:void(0);" class="text-grey post_delete _confirm mr-3">
+                <i class="icon-remove" title="<?php echo lang('delete');?>"></i>
+                <span class="d-none">
+                    <?php echo lang('delete');?>
+                </span>
+            </a>
+            <?php } ?>
+            <!--{hook website_reply_list_inc_delete_after.htm}-->
+
+            <!-- 评论楼层 -->
+            <!--{hook website_reply_list_inc_floor_before.htm}-->
+            <?php if($_post['floor']) { ?>
+            <span class="floor-parent">
+                <span class="floor mr-0">
+                    <?php echo $_post['floor'];?>
+                </span>
+                <?php echo lang('floor');?>
+            </span>
+            <?php } ?>
+            <!--{hook website_reply_list_inc_floor_after.htm}-->
+        </div>
+    </div>
+
+    <!-- 评论内容 -->
+    <div class="col-lg-12 message mt-2 break-all">
+        <!--{hook website_reply_list_inc_message_before.htm}-->
+        <?php echo $_post['message'];?>
+        <!--{hook website_reply_list_inc_message_after.htm}-->
+    </div>
+</li>
+<?php }} ?>
+
+<!--{hook website_reply_list_inc_end.htm}-->

@@ -1,0 +1,28 @@
+<!--
+页面顶部，显示的导航栏，此处仅为循环出需要显示的导航代码。
+可根据自己的需要修改 class 样式，其他代码不要轻易改动。
+-->
+<ul class="navbar-nav mr-auto">
+    <!--{hook header_nav_forum_start.htm}-->
+    <li class="nav-item home" fid="0" data-active="fid-0">
+        <a class="nav-link" href=".">
+            <i class="icon-home d-md-none"></i>
+            &nbsp;<?php echo lang('index_page');?>
+        </a>
+    </li>
+    <!--{hook header_nav_home_link_after.htm}-->
+    <!-- 遍历需要显示的导航 -->
+    <?php if (isset($forum_nav)) { foreach($forum_nav as $_forum) { ?>
+    <!--{hook header_nav_forumlist_loop_start.htm}-->
+    <!-- li 格式 重新定义或添加新 class -->
+    <li class="nav-item" fid="<?php echo $_forum['fid'];?>" data-active="fid-<?php echo $_forum['fid'];?>">
+        <!-- a标签格式 重新定义或添加新 class -->
+        <a class="nav-link" href="<?php echo $_forum['url'];?>">
+            <i class="icon-circle-o d-md-none"></i>
+            &nbsp;<?php echo $_forum['name'];?>
+        </a>
+    </li>
+    <!--{hook header_nav_forumlist_loop_end.htm}-->
+    <?php }} ?>
+    <!--{hook header_nav_forum_end.htm}-->
+</ul>

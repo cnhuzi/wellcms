@@ -1,0 +1,215 @@
+<!--
+加载默认顶部，需要自行创建
+请修改路径plugin/well_cms_x/view/template/header.inc.htm
+文件名可自定义，注意要更改引用的文件名
+-->
+<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/header.inc.htm');?>
+<main id="body">
+<!--
+此处控制整页不溢出，如需宽度100%用 container-fluid 替换 container
+如需完全无缝贴合左右，把container替换成container-fluid p-0
+-->
+    <div class="container">
+        <!--{hook website_portal_start.htm}-->
+        <div class="row">
+            <div class="col-lg-4 padding-right">
+                <div class="card" style="min-height: 402px;">
+                    <!-- 两列轮播 -->
+                    <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <?php if (!empty($slide)) {$n = count($slide) / 2;for ($i = 0; $i < $n; ++$i) { ?>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="<?php echo $i; ?>"<?php if($i == 0) {echo 'class="active"';} ?>></li>
+                            <?php }} ?>
+                        </ol>
+
+                        <div class="carousel-inner">
+                            <?php if (!empty($slide)) { $i=0;foreach($slide as &$_thread) { $i++; ?>
+
+                            <?php if ($i % 2 == 1) { ?>
+                            <div class="carousel-item <?php if ($i == 1) {echo 'active';} ?>">
+                                <div class="row">
+                                    <?php } ?>
+
+                                    <div class="col-6 <?php if ($i % 2 == 1) {echo 'pl-0 pr-1';} elseif ($i%2 == 0) {echo 'pl-1 pr-0';} ?>">
+                                        <a href="<?php echo $_thread['url'];?>">
+                                            <img class="d-block w-100 rounded" src="<?php echo $_thread['icon_text']; ?>" alt='<?php echo $_thread['subject'];?>'>
+                                            <!--<div class="carousel-caption d-none d-md-block">
+                                                <h2>
+                                                    <?php echo $_thread['subject'];?>
+                                                </h2>
+                                            </div>-->
+                                        </a>
+                                    </div>
+
+                                    <?php if($i%2 == 0) { ?>
+                                </div>
+                            </div>
+                            <?php } ?>
+
+                            <?php }} ?>
+                        </div>
+
+                    </div>
+
+                    <!-- 所有属性 可根据自己需要调用其他内容 -->
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <ul class="list-unstyled threadlist ul_round nowrap">
+                                <?php if (!empty($arrlist['flag'])) {foreach($arrlist['flag'] as $_thread) { ?>
+                                <li class="tap ml-2" data-href="<?php echo $_thread['url'];?>">
+                                    <h2>
+                                        <!--
+                                 主题 title 和 aria-label 使用单引号包裹，以免字符串中有符合
+                                 d-block 整行填充
+                                  nowrap 和 ellipsis 控制显示字符长度，过长则自动隐藏多余字符
+                                -->
+                                        <a href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                                        <div class="ellipsis">
+                                            <?php echo $_thread['subject'];?>
+                                        </div>
+                                        </a>
+                                    </h2>
+                                </li>
+                                <?php }} ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 此处调用 4条置顶内容  -->
+            <div class="col-lg-5 padding-right padding-left">
+                <div class="card" style="min-height: 402px;">
+                    <div class="py-1 px-4">
+                        <ul class="list-unstyled threadlist">
+                            <?php if (!empty($arrlist['top'])) {foreach ($arrlist['top'] as $_thread) {if ($_thread['i'] <= 4) { ?>
+                            <!-- 最后一条不显示分割线 -->
+                            <li <?php if ($_thread['i'] != count($arrlist['top'])) {echo 'class="thread"';} elseif ($_thread['i'] == count($arrlist['top'])) {echo 'class="mt-2"';}?>>
+
+                            <h2 class="font-weight-bold break-all nowrap">
+                                <!--
+                                 主题 title 和 aria-label 使用单引号包裹，以免字符串中有符合
+                                 d-block 整行填充
+                                  nowrap 和 a标签中ellipsis 控制显示字符长度，过长则自动隐藏多余字符
+                                -->
+                                <a class="d-block ellipsis" href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                                <?php echo $_thread['subject'];?>
+                                </a>
+                            </h2>
+                            <a href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                            <p class="m-t-sm mb-1 text-grey break-all">
+                                <?php echo $_thread['brief']?$_thread['brief']:lang('well_not_brief');?>
+                            </p>
+                            </a>
+                            </li>
+                            <?php }}} ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 padding-left d-none d-lg-block">
+                <div class="card" style="min-height: 402px;">
+                    <!-- 此处调用的首页第一个显示的属性 -->
+                    <div class="row nowrap mx-1 mt-3">
+                        <?php if(!empty($first_flag)){foreach($first_flag as $_thread) { ?>
+                        <div class="col-lg-12">
+                            <a class="d-block ellipsis" href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                            <?php echo $_thread['subject'];?>
+                            </a>
+                        </div>
+                        <?php }} ?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--{hook website_portal_before.htm}-->
+        <div class="row">
+<!--
+下面遍历设置为显示的栏目和栏目下的最新主题
+-->
+            <?php if (!empty($arrlist['list'])) { $i=0; foreach ($arrlist['list'] as $_forum) { $i++; ?>
+            <div class="col-md-6 <?php if($i%2 == 0) {echo 'padding-left';} else {echo 'padding-right';}?>">
+                <div class="card">
+                    <!-- 输出栏目 -->
+                    <div class="card-header">
+                        <div class="row justify-content-between m-0">
+                            <div>
+                                <strong>
+                                    <a href="<?php echo $_forum['url'];?>" title='<?php echo $_forum['name'];?>'>
+                                    <!-- 输出栏目名 -->
+                                    <?php echo $_forum['name']; ?>
+                                    </a>
+                                </strong>
+                            </div>
+                            <div>
+                                <!-- 输出栏目路径 -->
+                                <a href="<?php echo $_forum['url'];?>">
+                                    <i class="icon-angle-double-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 输出栏目下最新主题 -->
+                    <div class="row">
+                        <!-- 输出栏目下最新2条主题 图片导读 -->
+                        <div class="col-md-4">
+                            <ul class="row list-unstyled threadlist nowrap pl-2 mb-0">
+                                <?php if (!empty($_forum['news'])) {$i=0; foreach ($_forum['news'] as &$_thread) {if ($_thread['icon_text'] && ++$i <= 2) { ?>
+                                <li class="col-6 col-md-12 mt-3">
+                                    <a href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                                    <img class="d-block w-100" src="<?php echo $_thread['icon_text']; ?>" alt='<?php echo $_thread['subject'];?>'>
+
+                                    <div class="ellipsis">
+                                        <?php echo $_thread['subject'];?>
+                                    </div>
+                                    </a>
+                                </li>
+                                <?php }}}else{ ?>
+                                <li class="col-md-12">
+                                    <img class="main-pic" src="plugin/well_cms_x/view/image/nopic.png" width="170" height="128">
+                                    <p class="p-2 m-0">
+                                        <?php echo lang('none');?>
+                                    </p>
+                                </li>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                        <!-- 输出栏目下最新主题 -->
+                        <div class="col-md-8">
+                            <ul class="row list-unstyled threadlist nowrap pt-3">
+                                <!--最新内容-->
+                                <?php if (!empty($_forum['news'])) { foreach ($_forum['news'] as $_thread) { ?>
+                                <li class="col-lg-12 tap" data-href='<?php echo $_thread['url'];?>'>
+                                <h2>
+                                    <a class="ellipsis" href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+                                    <?php echo $_thread['subject'];?>
+                                    </a>
+                                </h2>
+                                </li>
+                                <?php }} ?>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <?php }} ?>
+        </div>
+        <!--{hook website_portal_end.htm}-->
+    </div>
+</main>
+
+<!--
+加载默认页脚，需要自行创建
+请修改路径plugin/well_cms_x/view/template/footer.inc.htm
+文件名可自定义，注意要更改引用的文件名
+-->
+<?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/footer.inc.htm');?>
+
+<!-- JS代码 -->
+<script>
+    $('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+<!--{hook website_portal_js.htm}-->

@@ -1,0 +1,84 @@
+<!--
+内容完整回复评论代码
+-->
+<!-- 判断是否开启评论 -->
+<?php if ($forum['well_comment'] && $thread['closed'] < 2) { ?>
+<!--{hook website_read_reply_before.htm}-->
+<div class="card card-postlist">
+    <div class="card-body">
+        <div class="card-title">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <b>
+                        <?php echo lang('new_post');?>
+                    </b>
+                    (<span class="posts"><?php echo $thread['posts'];?></span>)
+                </div>
+                <!--{hook website_read_reply_list_title_middle.htm}-->
+                <div>
+                    <!--{hook website_read_reply_list_title_right.htm}-->
+                </div>
+            </div>
+        </div>
+        <ul class="list-unstyled postlist">
+            <!-- 加载评论内容 -->
+            <?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/reply_list.inc.htm'); ?>
+
+            <!-- 加载评论框 -->
+            <?php if(!empty($user) && $thread['closed'] == 0) { ?>
+            <li class="row post newpost media">
+                <div class="col-lg-12 d-flex justify-content-between small text-muted">
+                    <!--{hook website_read_reply_post_start.htm}-->
+                    <div>
+                        <a href="<?php echo url('user-'.$user['uid']);?>" tabindex="-1">
+                            <img class="avatar-1 mr-2" src="<?php echo $user['avatar_url'];?>">
+                        </a>
+                        <!--{hook website_read_reply_post_username_before.htm}-->
+                        <span>
+                            <?php echo $user['username'];?>
+                        </span>
+                        <!--{hook website_read_reply_post_username_after.htm}-->
+                    </div>
+                    <div>
+                        <!--{hook website_read_reply_post_floor_before.htm}-->
+                        <span class="floor" id="newfloor">
+                            <?php echo ($thread['posts'] + 2);?>
+                        </span>
+                        <?php echo lang('floor');?>
+                        <!--{hook website_read_reply_post_floor_after.htm}-->
+                    </div>
+                    <!--{hook website_read_reply_post_end.htm}-->
+                </div>
+                <div class="col-lg-12">
+                    <!--{hook website_read_reply_form_start.htm}-->
+                    <form action="<?php echo url('reply-create-'.$tid);?>" method="post" id="quick_reply_form" class="d-block">
+                        <input type="hidden" name="doctype" value="1" />
+                        <input type="hidden" name="return_html" value="1" />
+                        <input type="hidden" name="quotepid" value="0" />
+                        <!--{hook website_read_reply_form_before.htm}-->
+                        <div class="message mt-1">
+                            <textarea class="form-control" placeholder="<?php echo lang('message');?>" name="message" id="message"></textarea>
+                        </div>
+                        <!--{hook website_read_reply_form_after.htm}-->
+                        <div class="text-muted mt-2 small text-center">
+                            <!--{hook website_read_quick_reply_submit_before.htm}-->
+                            <button type="submit" class="btn btn-sm btn-secondary" id="submit" data-loading-text="<?php echo lang('submiting');?>..."> <?php echo lang('post_create');?> </button>
+                            <!--{hook website_read_quick_reply_submit_after.htm}-->
+                        </div>
+                    </form>
+                    <!--{hook website_read_reply_form_end.htm}-->
+                </div>
+            </li>
+            <?php } ?>
+        </ul>
+    </div>
+</div>
+<!--{hook website_read_reply_after.htm}-->
+<?php } ?>
+<?php if($pagination) { ?>
+<nav>
+    <ul class="pagination my-4 justify-content-center flex-wrap">
+        <?php echo $pagination; ?>
+    </ul>
+</nav>
+<?php }?>

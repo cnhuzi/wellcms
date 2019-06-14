@@ -1,0 +1,16 @@
+<ul class="list-unstyled threadlist">
+    <?php if (!empty($arrlist['top'])) {foreach ($arrlist['top'] as $_thread) {if ($_thread['i'] <= 4 /* 4为显示数量，根据自己需要调整数字 */) { ?>
+    <li class="thread">
+        <h2 class="font-weight-bold break-all nowrap">
+            <a class="d-block ellipsis" href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+            <?php echo $_thread['subject'];?>
+            </a>
+        </h2>
+        <a href="<?php echo $_thread['url'];?>" title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+            <p class="m-t-sm mb-1 text-grey break-all">
+                <?php echo $_thread['brief']?$_thread['brief']:lang('well_not_brief');?>
+            </p>
+        </a>
+    </li>
+    <?php }}} ?>
+</ul>

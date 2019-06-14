@@ -1,0 +1,60 @@
+<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/header.inc.htm');?>
+
+<!--{hook website_tag_start.htm}-->
+
+<div class="row">
+	<div class="col-lg-9 mx-auto main">
+		<div class="d-flex justify-content-between">
+			<ol class="breadcrumb col">
+				<!--{hook website_tag_breadcrumb_li_startd.htm}-->
+				<li class="breadcrumb-item"><a href="./"><i class="icon-home" aria-hidden="true"></i></a></li>
+				<!--{hook website_tag_breadcrumb_li_before.htm}-->
+				<li class="breadcrumb-item">
+					<a href="<?php echo $header['mobile_link'];?>"><?php echo lang('well_tag').lang('well_list');?></a>
+				</li>
+				<li class="breadcrumb-item">
+					<a href="<?php echo well_tag_url($tagid);?>"><?php echo $read['name'];?></a>
+
+				</li>
+				<!--{hook website_tag_breadcrumb_li_end.htm}-->
+			</ol>
+			<!--{hook website_tag_breadcrumb_ol.htm}-->
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card card-threadlist">
+					<div class="card-body">
+						<ul class="list-unstyled threadlist mb-0">
+							<!--{hook website_tag_threadlist_before.htm}-->
+							<?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/thread_list.inc.htm');?>
+							<!--{hook website_tag_threadlist_after.htm}-->
+						</ul>
+					</div>
+				</div>
+
+				<!--{hook website_tag_list_mod_before.htm}-->
+
+				<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/thread_list_mod.inc.htm');?>
+
+				<!--{hook website_tag_page_before.htm}-->
+
+				<?php if ($pagination) { ?>
+				<nav class="my-3">
+					<ul class="pagination justify-content-center flex-wrap">
+						<?php echo $pagination; ?>
+					</ul>
+				</nav>
+				<?php } ?>
+				<!--{hook website_tag_page_after.htm}-->
+			</div>
+		</div>
+	</div>
+    <!--<div class="col-lg-3 d-none d-lg-block aside"></div>-->
+    <!--{hook website_tag_after.htm}-->
+</div>
+
+<!--{hook website_tag_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/footer.inc.htm');?>
+
+<!--{hook website_tag_js.htm}-->

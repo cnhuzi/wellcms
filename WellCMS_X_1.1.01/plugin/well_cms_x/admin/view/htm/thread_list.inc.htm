@@ -1,0 +1,99 @@
+<!--{hook website_admin_thread_list_inc_start.htm}-->
+<?php
+					if($threadlist) {
+						$have_allowtop = 0;
+						foreach($threadlist as &$_thread) {
+							$_thread['allowtop'] = forum_access_mod($_thread['fid'], $gid, 'allowtop');
+							if($_thread['allowtop']) $have_allowtop = 1;
+						}
+					}
+					?>
+<?php if($threadlist) { foreach($threadlist as &$_thread) { ?>
+<li class="row media thread tap" data-href="../<?php echo $_thread['url']; ?>" tid="<?php echo $_thread['tid'];?>">
+    <?php if($have_allowtop) { ?>
+    <?php if($_thread['allowtop']) { ?>
+    <input type="checkbox" name="modtid" class="mt-3 mr-2" value="<?php echo $_thread['tid']; ?>" />
+    <?php } ?>
+    <?php } ?>
+
+	<div class="media-body">
+		<div class="media">
+			<?php if ($_thread['icon']) { ?>
+			<div class="col-4 col-md-2">
+				<a href="../<?php echo $_thread['url']; ?>" target="_blank">
+					<img class="d-block w-100 rounded" src="../<?php echo $_thread['icon_text'];?>" title="<?php echo $_thread['subject'];?>" alt="<?php echo $_thread['subject'];?>" />
+				</a>
+			</div>
+			<?php } ?>
+			<div class="media-body">
+
+                <!--{hook website_admin_thread_list_inc_thread_start.htm}-->
+
+				<div class="col-lg-12 subject break-all font-weight-bold">
+                    <!--{hook website_admin_thread_list_inc_top_before.htm}-->
+                    <?php if($_thread['top'] > 0) { ?>
+					<span class="mr-2">
+                    	<i class="icon-top-<?php echo $_thread['top']; ?>"></i>
+					</span>
+                    <?php } ?>
+                    <!--{hook website_admin_thread_list_inc_top_after.htm}-->
+					<!--{hook website_admin_thread_list_inc_closed_before.htm}-->
+					<?php if($_thread['closed'] > 0) { ?>
+					<span class="mr-2">
+						<i class="icon-lock"></i>
+					</span>
+					<?php } ?>
+                    <!--{hook website_admin_thread_list_inc_closed_after.htm}-->
+                    <!--{hook website_admin_thread_list_inc_subject_before.htm}-->
+					<a href="../<?php echo $_thread['url']; ?>" aria-label="<?php echo $_thread['subject'];?>" target="_blank"><?php echo $_thread['subject'];?></a>
+                    <!--{hook website_admin_thread_list_inc_subject_after.htm}-->
+				</div>
+
+                <!--{hook website_admin_thread_list_inc_subject_after.htm}-->
+
+				<div class="col-lg-12 text-muted brief mt-2">
+					<?php echo $_thread['brief'];?>
+				</div>
+
+                <!--{hook website_admin_thread_list_inc_brief_after.htm}-->
+
+				<div class="col-lg-12 text-grey mt-1 mb-2">
+					<!--{hook website_admin_thread_list_inc_avatar_before.htm}-->
+					<a href="../<?php echo url('user-' . $_thread['uid']);?>" rel="nofollow" tabindex="-1" class="mr-2">
+						<img class="avatar-1" src="../<?php echo $_thread['user_avatar_url'];?>">
+					</a>
+					<!--{hook website_admin_thread_list_inc_avatar_after.htm}-->
+
+					<span class="username text-grey mr-2" uid="<?php echo $_thread['uid'];?>"><?php echo $_thread['username'];?></span>
+					<!--{hook website_admin_thread_list_inc_username_after.htm}-->
+
+					<!--{hook website_admin_thread_list_inc_allow_before.htm-->
+					<?php if( $_thread['allowupdate'] || $_thread['allowdelete']) { ?>
+					<span class="float-right small">
+                    <?php if( $_thread['allowupdate']) { ?>
+						<span data-href="<?php echo url('content-update-' . $_thread['tid']); ?>" class="text-grey mr-3 update-thread"><i class="icon-edit"></i> <?php echo lang('edit');?></span>
+						<?php } ?>
+						<?php if($_thread['allowdelete']) { ?>
+						<span data-href="<?php echo url('content-delete-' . $_thread['tid']);?>" class="text-grey delete-thread"><i class="icon-remove"></i> <?php echo lang('delete');?></span>
+						<?php } ?>
+						<?php if (!empty($forum['well_thread_rank']) && isset($_thread['rank'])) {?>
+						<span class="ml-3">
+                            <input type="text" placeholder="<?php echo lang('well_rank');?>" name="rank" value="<?php echo $_thread['rank']; ?>" rank="<?php echo $_thread['rank'];?>" id="<?php echo $_thread['tid'];?>" style="width: 35px;">
+                        </span>
+						<?php }?>
+                </span>
+					<?php } ?>
+					<!--{hook website_admin_thread_list_inc_allow_after.htm}-->
+				</div>
+
+                <!--{hook website_admin_thread_list_inc_thread_end.htm}-->
+			</div>
+		</div>
+	</div>
+</li>
+<?php }} else { ?>
+<li>
+	<div><?php echo lang('none');?></div>
+</li>
+<?php } ?>
+<!--{hook website_admin_thread_list_inc_end.htm}-->

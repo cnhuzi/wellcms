@@ -1,0 +1,54 @@
+<ul class="navbar-nav">
+    <!-- 搜索代码 -->
+    <li class="nav-item">
+        <!-- 搜索链接 -->
+        <a class="nav-link" href="<?php echo url('mode-search');?>">
+            <i class="icon-search"></i>
+            &nbsp;
+            <?php echo lang('search');?>
+        </a>
+    </li>
+    <!--{hook header_nav_user_start.htm}-->
+    <?php if(empty($uid)) { ?>
+    <!-- 登录代码 -->
+    <li class="nav-item">
+        <!-- 登录链接 -->
+        <a class="nav-link" rel="nofollow" href="<?php echo url('user-login');?>">
+            <i class="icon-user"></i>
+            &nbsp;
+            <?php echo lang('login');?>
+        </a>
+    </li>
+    <!-- 用户注册 -->
+    <!--<li class="nav-item"><a class="nav-link" href="<?php echo url('user-create');?>"><?php echo lang('register');?></a></li>-->
+    <?php } else { ?>
+    <!-- 登录后显示代码 -->
+    <li class="nav-item username">
+        <a class="nav-link" rel="nofollow" href="<?php echo url('my');?>">
+            <!-- 登录后用户头像 -->
+            <img class="avatar-1 mr-1" src="<?php echo $user['avatar_url'];?>">
+            &nbsp;
+            <!-- 登录后用户名 -->
+            <?php echo $user['username'];?>
+        </a>
+    </li>
+    <!-- 管理员 -->
+    <?php if($gid == 1) { ?>
+    <li class="nav-item">
+        <a class="nav-link" rel="nofollow" href="admin/">
+            <i class="icon-home"></i>
+            &nbsp;<?php echo lang('admin_page');?>
+        </a>
+    </li>
+    <?php } ?>
+    <!--{hook header_nav_admin_page_after.htm}-->
+    <!-- 退出登录 -->
+    <li class="nav-item">
+        <a class="nav-link" rel="nofollow" href="<?php echo url('user-logout');?>">
+            <i class="icon-sign-out"></i>
+            &nbsp;<?php echo lang('logout');?>
+        </a>
+    </li>
+    <?php } ?>
+    <!--{hook header_nav_user_end.htm}-->
+</ul>

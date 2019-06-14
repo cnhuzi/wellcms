@@ -1,0 +1,310 @@
+<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/header.inc.htm');?>
+
+<!--{hook website_read_start.htm}-->
+
+<div class="row">
+	<div class="col-lg-9 mx-auto main">
+		<!--{hook website_read_main_breadcrumb_start.htm}-->
+		<ol class="breadcrumb d-none d-md-flex">
+			<li class="breadcrumb-item"><a href="./" aria-label="<?php echo lang('index_page'); ?>"><i class="icon-home"></i></a></li>
+			<!--{hook website_read_main_breadcrumb_before.htm}-->
+			<li class="breadcrumb-item"><a href="<?php echo well_nav_format($forum, $extra); ?>"><?php echo $forum['name'];?></a></li>
+            <!--{hook website_read_main_breadcrumb_after.htm}-->
+			<li class="breadcrumb-item active"><a href="<?php echo well_url_format($fid, $tid, FALSE, $extra); ?>" title="<?php echo lang('index_page');?>返回主题第一页"><?php echo $thread['subject'];?></a></li>
+			<!--{hook website_read_main_breadcrumb_middle.htm}-->
+		</ol>
+		<!--{hook website_read_main_breadcrumb_end.htm}-->
+		
+		<div class="card card-thread">
+			<div class="card-body">
+				<div class="media">
+					<!--{hook website_read_main_avatar_before.htm}-->
+					<a href="<?php echo url('user-'.$thread['uid']);?>" tabindex="-1">
+						<img class="avatar-3 mr-3" src="<?php echo $thread['user_avatar_url'];?>">
+					</a>
+					<!--{hook website_read_main_after_before.htm}-->
+					<div class="media-body subject">
+						<!--{hook website_read_subject_before.htm}-->
+						<h1 class="break-all font-weight-bold">
+							<!--{hook website_read_subject_start.htm}-->
+							<?php echo $thread['subject'];?>
+							<!--{hook website_read_subject_end.htm}-->
+						</h1>
+						<!--{hook website_read_subject_after.htm}-->
+						<div class="d-flex justify-content-between small">
+							<div>
+								<!--{hook website_read_username_before.htm}-->
+								<span class="username">
+									<a href="<?php echo url('user-'.$thread['uid']);?>" class="text-muted font-weight-bold"><?php echo $thread['username'];?></a>
+								</span>
+                                <!--{hook website_read_date_before.htm}-->
+								<span class="date text-grey ml-2"><?php echo $thread['create_date_text'];?></span>
+                                <!--{hook website_read_date_after.htm}-->
+								<span class="text-grey ml-2"><i class="icon-eye"></i>&nbsp;<?php echo $thread['views'];?></span>
+								<!--{hook website_read_views_after.htm}-->
+							</div>
+							<div>
+								<!--{hook website_read_update_before.htm}-->
+								<?php if($allowupdate || $thread['allowupdate']) { ?>
+								<a href="<?php echo url('admin/content-update-'.$thread['tid']);?>" class="text-grey mr-2 post_update"><i class="icon-edit"></i> <?php echo lang('edit');?></a>
+								<?php } ?>
+								<!--{hook website_read_delete_after.htm}-->
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="message break-all">
+				<?php if($page == 1) { ?>
+					<!--需要 主图 文字环绕 删除下面的注释代码即可-->
+                    <!--<div class="clearfix float-left mx-2">
+                        <img src="<?php echo $thread['icon_text'];?>" alt="<?php echo $thread['subject'];?>" />
+                    </div>-->
+
+					<!--{hook website_read_message_before.htm}-->
+					<?php echo $thread_data['message'];?>
+					<!--{hook website_read_message_after.htm}-->
+					
+					<?php echo well_data_file_list_html($thread['filelist']);?>
+					<!--{hook website_read_filelist_after.htm}-->
+					
+				<?php } else { ?>
+				
+					<!--{hook website_read_message_more_before.htm}-->
+					<p><a href="<?php echo well_url_format($fid, $tid, FALSE, $extra); ?>"><?php echo lang('view_thread_message');?></a></p>
+					<!--{hook website_read_message_more_after.htm}-->
+					
+				<?php } ?>
+				</div>
+
+				<!--{hook website_read_plugin_before.htm}-->
+				<div class="plugin d-flex justify-content-center mt-3">
+					<!--{hook website_read_plugin_body.htm}-->
+				</div>
+				<!--{hook website_read_plugin_after.htm}-->
+
+				<?php if ($thread['tag']) { ?>
+				<hr>
+				<div class="row">
+					<div class="col-lg-12 text-muted mt-2">
+						<i class="icon-tags mr-2"></i>
+						<?php foreach($thread['tag_text'] as $key => $_tag) { ?>
+						<span class="badge border border-secondary mr-2">
+                            <h2 class="mb-0 small">
+                                <a class="text-secondary" href="<?php echo well_tag_url($key);?>">
+                                    <?php echo $_tag; ?>
+                                </a>
+							</h2>
+                        </span>
+						<?php }?>
+
+					</div>
+				</div>
+				<?php }?>
+			</div>
+		</div>
+
+        <?php if ($forum['well_comment'] && $thread['closed'] < 2) { ?>
+		<!--{hook website_read_reply_before.htm}-->
+		<div class="card card-postlist">
+			<div class="card-body">
+				<div class="card-title">
+					<div class="d-flex justify-content-between">
+						<div>
+							<b><?php echo lang('new_post');?></b> (<span class="posts"><?php echo $thread['posts'];?></span>)
+						</div>
+						<!--{hook website_read_reply_list_title_middle.htm}-->
+						<div>
+							<!--{hook website_read_reply_list_title_right.htm}-->
+						</div>
+					</div>
+				</div>
+				<ul class="list-unstyled postlist">
+					<?php include _include(APP_PATH.'plugin/well_cms_x/view/htm/reply_list.inc.htm'); ?>
+					
+					<?php if(!empty($user) && $thread['closed'] == 0) { ?>
+					<li class="row post newpost media">
+                        <div class="col-lg-12 d-flex justify-content-between small text-muted">
+                            <!--{hook website_read_reply_post_start.htm}-->
+                            <div>
+                                <a href="<?php echo url('user-'.$user['uid']);?>" tabindex="-1">
+                                <img class="avatar-1 mr-2" src="<?php echo $user['avatar_url'];?>">
+                                </a>
+                                <!--{hook website_read_reply_post_username_before.htm}-->
+                                <span><?php echo $user['username'];?></span>
+                                <!--{hook website_read_reply_post_username_after.htm}-->
+                            </div>
+                            <div>
+                                <!--{hook website_read_reply_post_floor_before.htm}-->
+                                <span class="floor" id="newfloor"><?php echo ($thread['posts'] + 2);?></span><?php echo lang('floor');?>
+                                <!--{hook website_read_reply_post_floor_after.htm}-->
+                            </div>
+                            <!--{hook website_read_reply_post_end.htm}-->
+                        </div>
+                        <div class="col-lg-12">
+                            <!--{hook website_read_reply_form_start.htm}-->
+                            <form action="<?php echo url('reply-create-'.$tid);?>" method="post" id="quick_reply_form" class="d-block">
+                                <input type="hidden" name="doctype" value="1" />
+                                <input type="hidden" name="return_html" value="1" />
+                                <input type="hidden" name="quotepid" value="0" />
+                                <!--{hook website_read_reply_form_before.htm}-->
+                                <div class="message mt-1">
+                                    <textarea class="form-control" placeholder="<?php echo lang('message');?>" name="message" id="message"></textarea>
+                                </div>
+                                <!--{hook website_read_reply_form_after.htm}-->
+                                <div class="text-muted mt-2 small text-center">
+                                    <!--{hook website_read_quick_reply_submit_before.htm}-->
+                                    <button type="submit" class="btn btn-sm btn-secondary" id="submit" data-loading-text="<?php echo lang('submiting');?>..."> <?php echo lang('post_create');?> </button>
+                                    <!--{hook website_read_quick_reply_submit_after.htm}-->
+                                </div>
+                            </form>
+                            <!--{hook website_read_reply_form_end.htm}-->
+                        </div>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+		</div>
+		<!--{hook website_read_reply_after.htm}-->
+        <?php } ?>
+		<?php if($pagination) { ?>
+		<nav><ul class="pagination my-4 justify-content-center flex-wrap"><?php echo $pagination; ?></ul></nav>
+		<?php }?>
+		
+		<!--{hook website_read_page_after.htm}-->
+		
+		<!--<a role="button" class="btn btn-secondary btn-block xn-back col-lg-6 mx-auto mb-3" href="javascript:history.back();"><?php echo lang('back');?></a>-->
+		<!--{hook website_read_back_after.htm}-->
+	</div>
+	<?php if($flaglist){ ?>
+	<div class="col-lg-3 d-none d-lg-block aside">
+        <!--{hook well_item_right_start.htm}-->
+		<?php foreach($flaglist as $_flag) { ?>
+		<div class="card d-none d-lg-block aside">
+			<div class="card-header">
+				<h3 class="font-weight-bold">
+					<a href="<?php echo $_flag['url'];?>" title='<?php echo $_flag['name'];?>' aria-label='<?php echo $_flag['name'];?>'><?php echo $_flag['name']; ?></a>
+				</h3>
+			</div>
+			<ul class="list-unstyled threadlist mx-3 mb-1 nowrap">
+				<?php if($_flag['list']){foreach($_flag['list'] as $_thread) { ?>
+				<li class="thread py-2">
+					<h4 class="m-0">
+						<a href="<?php echo $_thread['url'];?>" class="d-block ellipsis" <?php echo ($_thread['link']?'rel="nofollow" target="_blank"':''); ?> title='<?php echo $_thread['subject'];?>' aria-label='<?php echo $_thread['subject'];?>'>
+						<?php echo $_thread['subject'];?>
+						</a>
+					</h4>
+				</li>
+				<?php }} ?>
+			</ul>
+		</div>
+		<?php } ?>
+        <!--{hook well_item_right_end.htm}-->
+	</div>
+    <?php } ?>
+</div>
+
+<!--{hook website_read_end.htm}-->
+
+<?php include _include(APP_PATH . 'plugin/well_cms_x/view/htm/footer.inc.htm');?>
+
+<script>
+var jform = $('#quick_reply_form');
+var jsubmit = $('#submit');
+jform.on('submit', function() {
+	jform.reset();
+	jsubmit.button('loading');
+	var postdata = jform.serialize();
+	$.xpost(jform.attr('action'), postdata, function(code, message) {
+		if(code == 0) {
+			var s = '<ul>'+message+'</ul>';
+			var jli = $(s).find('li');
+			jli.insertBefore($('.postlist > .post').last());
+            $('.post-subject').remove();
+			jsubmit.button('reset');
+			$('#message').val('');
+			
+			/*楼层 +1*/
+			var jfloor = $('#newfloor');
+			jfloor.html(xn.intval(jfloor.html()) + 1);
+			
+			/*回复数 +1*/
+			var jposts = $('.posts');
+			jposts.html(xn.intval(jposts.html()) + 1);
+			
+		} else if(code < 0) {
+			$.alert(message);
+			jsubmit.button('reset');
+		} else {
+			jform.find('[name="'+code+'"]').alert(message).focus();
+			jsubmit.button('reset');
+		}
+	});
+	return false;
+});
+
+/*缩放图片，适应屏幕大小*/
+function resize_image() {
+	var jmessagelist = $('div.message');
+	var first_width = jmessagelist.width(); /* 815 : 746; 734 746*/
+	jmessagelist.each(function() {
+		var jdiv = $(this);
+		var maxwidth = jdiv.attr('isfirst') ? first_width : jdiv.width();
+		var jmessage_width = Math.min(jdiv.width(), maxwidth);
+		jdiv.find('img, embed, iframe, video').each(function() {
+			var jimg = $(this);
+			var img_width = this.org_width;
+			var img_height = this.org_height;
+			if(!img_width) {
+				var img_width = jimg.attr('width');
+				var img_height = jimg.attr('height');
+				this.org_width = img_width;
+				this.org_height = img_height;
+			}
+			/*var percent = xn.min(100, xn.ceil((img_width / jmessage_width) * 100));*/
+			if(img_width > jmessage_width) {
+				if(this.tagName == 'IMG') {
+					jimg.width(jmessage_width);
+					jimg.css('height', 'auto');
+					jimg.css('cursor', 'pointer');
+					jimg.on('click', function() {
+						/*window.open(jimg.attr('src'));*/
+					});
+				} else {
+					jimg.width(jmessage_width);
+					var height = (img_height / img_width) * jimg.width();
+					jimg.height(height);
+				}
+			}
+		});
+	});
+}
+
+/*对于超宽的表格，加上响应式*/
+function resize_table() {
+	$('div.message').each(function() {
+		var jdiv = $(this);
+		jdiv.find('table').addClass('table').wrap('<div class="table-responsive"></div>'); 
+	});
+}
+
+$(function() {
+	resize_image();
+	resize_table();
+	$(window).on('resize', resize_image);
+});
+
+/*输入框自动伸缩*/
+var jmessage = $('#message');
+jmessage.on('focus', function() {if(jmessage.t) { clearTimeout(jmessage.t); jmessage.t = null; } jmessage.css('height', '6rem'); });
+jmessage.on('blur', function() {jmessage.t = setTimeout(function() { jmessage.css('height', '2.5rem');}, 1000); });
+
+$('#nav li[data-active="fid-<?php echo $fid;?>"]').addClass('active');
+</script>
+
+<?php if($thread['closed'] && ($gid == 0 || $gid > 5)) { ?>
+<script>
+jmessage.val('<?php echo lang('thread_has_already_closed');?>').attr('readonly', 'readonly');
+</script>
+<?php } ?>
+<!--{hook website_read_js.htm}-->

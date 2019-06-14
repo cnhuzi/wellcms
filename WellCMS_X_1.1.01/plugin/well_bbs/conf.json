@@ -1,0 +1,14 @@
+{
+    "name": "Xiuno BBS 4.0.4",
+    "brief": "Xiuno BBS 4.0.4 轻论坛插件，与xiuno官方功能相同，同时支持xiuno官方所有插件，安装BBS相关插件前，必须先安装此轻论坛插件，使用xiuno官方的其他插件，必须关闭压缩模式。",
+    "version": "4.0.4",
+    "software_version": "1.0.0",
+    "bbs_version": "4.0.4",
+    "installed": 0,
+    "enable": 0,
+    "hooks_rank": [],
+    "overwrites_rank": [],
+    "dependencies": {
+        "well_cms_x": "1.0.0"
+    }
+}

@@ -1,0 +1,128 @@
+<form action="<?php echo $form_action;?>" method="post" id="form">
+	<input type="hidden" name="doctype" value="<?php echo $form_doctype;?>" />
+	<input type="hidden" name="quotepid" value="<?php echo $quotepid;?>" />
+    <!--{hook website_thread_post_inc_hidden_before.htm}-->
+    <div class="row">
+        <div class="col-12 col-md-9">
+            <div class="form-group">
+                <!--{hook website_thread_post_inc_fid_select_before.htm}-->
+                <select class="custom-select mr-1 w-auto" name="fid">
+                    <?php foreach ($website_forumlist as $forum) { ?>
+                    <option value="<?php echo $forum['fid']; ?>"><?php echo $forum['name']; ?></option>
+                    <?php } ?>
+                </select>
+                <!--{hook website_thread_post_inc_fid_select_after.htm}-->
+            </div>
+            <!--{hook website_thread_post_inc_subject_before.htm}-->
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="<?php echo lang('subject');?>" name="subject" value="<?php echo $form_subject;?>" id="subject">
+            </div>
+            <!--{hook website_thread_post_inc_subject_after.htm}-->
+            <div class="form-group message" style="<?php echo (!empty($form_link)?'display: none;':'');?>">
+                <textarea class="form-control" placeholder="<?php echo lang('message');?>" name="message" id="message" style="height: 300px;"><?php echo $form_message;?></textarea>
+            </div>
+            <!--{hook website_thread_post_inc_message_after.htm}-->
+            <div class="form-group row taglist mx-0">
+                <span class="border border-secondary tag btn-sm mr-3 d-none"></span>
+                <?php if (!empty($thread['tag_text'])) {foreach ($thread['tag_text'] as $key => $_tag) { ?>
+                <span class="border border-secondary tag btn-sm mr-3"><?php echo $_tag; ?></span>
+                <?php }} ?>
+                <input id="tag" type="text" class="form-control small btn-sm" placeholder="<?php echo lang('well_tag_tips').lang('well_tag');?>" name="tag" value="" style="width: 90px">
+                <input type="hidden" name="tags" id="tags" value="<?php echo $tagstr;?>" />
+            </div>
+            <!--{hook website_thread_post_inc_tag_after.htm}-->
+            <div class="form-group brief">
+                <textarea class="form-control" placeholder="<?php echo lang('well_brief_limit');?>" name="brief" id="brief" style="height: 2.5rem;"><?php echo $form_brief;?></textarea>
+            </div>
+            <!--{hook website_thread_post_inc_brief_after.htm}-->
+            <div class="form-group keyword" style="<?php echo (!empty($form_link)?'display: none;':'');?>">
+                <input type="text" class="form-control" placeholder="SEO<?php echo lang('well_keywords') . lang('well_exceed limit_will_be_intercepted', array('n' => 64));?>" name="keyword" value="<?php echo $form_keyword;?>" id="keyword">
+            </div>
+            <!--{hook website_thread_post_inc_keyword_after.htm}-->
+            <div class="form-group">
+                <textarea class="form-control description" placeholder="<?php echo !empty($form_link)?lang('well_url_link'):('SEO'.lang('well_description') . lang('well_exceed limit_will_be_intercepted', array('n' => 120)) .'('.lang('well_description_empty_use_brief').')');?>" name="description" id="description" style="height: 4rem;"><?php echo $form_description;?></textarea>
+            </div>
+            <!--{hook website_thread_post_inc_description_after.htm}-->
+            <div class="form-group">
+                <!--{hook website_thread_post_inc_attach_before.htm}-->
+                <div class="attachlist_parent col-12">
+                    <a class="small text-left" href="javascript:void(0)">
+                        <label class="addattach" id="addattach">
+                            <i class="icon-folder-open-o"></i>
+                            <?php echo lang('add_attach');?>
+                            <span style="display: none;">
+                            <input type="file"  multiple="multiple" />
+                            </span>
+                        </label>
+                    </a>
+                    <!--{hook website_thread_post_inc_file_list_before.htm}-->
+                    <?php echo well_data_file_list_html($filelist, TRUE, TRUE, TRUE);?>
+                    <!--{hook website_thread_post_inc_file_list_after.htm}-->
+                </div>
+            </div>
+            <!--{hook website_thread_post_inc_attach_after.htm}-->
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="sticky-top pt-2">
+                <!--{hook website_thread_post_inc_addicon_before.htm}-->
+                <div class="form-group addicon small">
+                    <!--{hook website_post_inc_addicon_before.htm}-->
+                    <label class="d-block w-100 img_1" tabindex="10" data-toggle="tooltip" title="<?php echo lang('well_up_picture_size',array('width' => $pic_width, 'height' => $pic_height)); ?>">
+                        <img id="img_1" n="1" class="d-block w-100 rounded" src="<?php echo $mainpic; ?>" />
+                        <span class="addpic" style="display: none;">
+                            <i class="icon-file-image-o"></i>
+                            <?php echo lang('well_add_mainpic');?>
+                            <input type="file" multiple="multiple" data-assoc="img_1" />
+                        </span>
+                    </label>
+                    <!--{hook website_post_inc_addicon_after.htm}-->
+                </div>
+                <!--{hook website_thread_post_inc_addicon_after.htm}-->
+                <!--{hook website_thread_post_inc_mainpic_start.htm}-->
+
+                <div class="form-group">
+                    <?php if ($action == 'create') { ?>
+                    <!--{hook website_thread_post_inc_mainpic_before.htm}-->
+                    <label class="custom-input custom-checkbox m-0 mr-2"><input class="mr-1" type="checkbox" name="mainpic" value="1" /><?php echo lang('well_get_the_main_picture');?></label>
+                    <!--{hook website_thread_post_inc_mainpic_after.htm}-->
+                    <?php } ?>
+
+                    <!--{hook website_thread_post_inc_delete_before.htm}-->
+                    <label class="custom-input custom-checkbox m-0 mr-2"><input class="mr-1" type="checkbox" name="delete_pic" value="1" /><?php echo lang('well_delete').lang('well_main_picture');?></label>
+                    <!--{hook website_thread_post_inc_delete_after.htm}-->
+                    <label class="custom-input custom-checkbox m-0"><input class="mr-1" type="checkbox" name="save_image" value="1" /><?php echo lang('well_save_remote_image');?></label>
+                    <!--{hook website_thread_post_inc_save_image_after.htm}-->
+                </div>
+
+                <!--{hook website_thread_post_inc_mainpic_end.htm}-->
+                <div class="form-group mb-2">
+                    <label class="custom-input custom-checkbox mb-0 mr-2"><input class="mr-1" type="checkbox" name="link" value="1" <?php echo $form_link;?> /><?php echo lang('well_url_link');?></label>
+                    <!--{hook website_thread_post_inc_type_after.htm}-->
+                    <label class="custom-input custom-checkbox m-0 mr-2"><input class="mr-1" type="checkbox" name="closed" value="1" <?php echo $form_closed;?> /><?php echo lang('well_reply_closed');?></label>
+                    <!--{hook website_thread_post_inc_closed_after.htm}-->
+                    <label class="custom-input custom-checkbox m-0"><input class="mr-1" type="checkbox" name="brief_auto" value="1" /><?php echo lang('well_brief_auto');?></label>
+                    <!--{hook website_thread_post_inc_closed_after.htm}-->
+                </div>
+                <!--{hook website_thread_post_inc_flag_before.htm}-->
+                <div class="form-group">
+                    <div class="row index-flag-list">
+
+                    </div>
+                    <div class="row flag-list">
+
+                    </div>
+                </div>
+                <!--{hook website_thread_post_inc_flag_after.htm}-->
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group my-3">
+        <!--{hook website_thread_post_inc_submit_after.htm}-->
+        <button type="submit" class="btn btn-success btn-block xn-back col-md-6 mx-auto mb-4" id="submit" data-loading-text="<?php echo lang('submiting');?>..."> <?php echo $form_submit_txt;?> </button>
+        <!--{hook website_post_inc_submit_after.htm}-->
+        <a role="button" class="btn btn-secondary btn-block xn-back col-md-6 mx-auto mb-3" href="javascript:history.back();"><?php echo lang('back');?></a>
+        <!--{hook website_thread_post_inc_history_back_after.htm}-->
+    </div>
+</form>

@@ -1,0 +1,54 @@
+:root {
+    --dark-blue: #2B3D51;
+    --black-red: #291204;
+    --mobile-but: rgba(199, 202, 205, 0.9);/*移动端隐藏显示侧边栏按钮*/
+    --light-green: #eaebec;
+    --teal: #008080;/*侧边栏选中色*/
+    --silver: #ADB5BD;/*侧边栏线条银色*/
+    --white-smoke: #eaebec;/*背景色*/
+    --tangerine: #ff3400;/*频道置顶*/
+}
+body{margin: 0;background-color: var(--white);font-size: 1rem;}
+.bg-dark-blue{background: var(--dark-blue) !important;}
+.bg-black-red{background: var(--black-red) !important;}
+.bg-mobile-but{background: var(--mobile-but) !important;}
+.bg-light-green{background: var(--light-green) !important;}
+.bg-teal{background: var(--teal) !important;}
+.bg-silver{background: var(--silver) !important;}
+.bg-white-smoke{background: var(--white-smoke) !important;}
+.nowrap{white-space:nowrap;}
+.ellipsis{text-overflow:ellipsis;overflow:hidden;}
+.price { font-size: 1rem; color:coral; font-weight: bold;}
+.price:before { content:"￥"; font-weight: bold;}
+.brief {display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;}
+.update-thread,.delete-thread {cursor: pointer;}
+.tag-outline-list{margin-top: 0;margin-bottom: 1rem;}
+/*
+.tag-outline-list .active {font-weight: 800;color: #fff;background-color: #868e96;border-color: #868e96;}*/
+.icon-top-2 {
+    color: var(--tangerine) !important;
+}
+.size0{font-size: .9rem;}
+.size1{font-size: 1rem;}
+.size2{font-size: 1.1rem;}
+.size3{font-size: 1.2rem;}
+.size4{font-size: 1.3rem;}
+.size5{font-size: 1.4rem;}
+.size6{font-size: 1.5rem;}
+.size7{font-size: 1.6rem;}
+@media (min-width: 576px) {
+    .subject h1 {font-size: 1.6rem;}
+    .threadlist h2,h3,h4{font-size: 1rem;}
+}
+
+/* 小屏 + 中屏: small + middle */
+@media (max-width: 992px) {
+    .subject h1 {font-size: 1.2rem;}
+    .threadlist h2,h3,h4{font-size: .9rem;}
+}
+
+/* 小屏: only small screen */
+@media (max-width: 576px) {
+    .subject h1 {font-size: 1rem;}
+    .threadlist h2,h3,h4{font-size: .9rem;}
+}
